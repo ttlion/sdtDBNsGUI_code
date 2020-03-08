@@ -115,12 +115,16 @@ class LearnDBN:
         printInfo = Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN")
         printInfo.grid(row=4, column=1, columnspan=3)
 
+        self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', str(markovLag), '-p', str(pValue), '-b', str(bValue), '-s', sfValue, '-pm', stationaryValue]
+
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-i', dynObsFileName, '-is', staticObsFileName, '-m', str(markovLag), '-p', str(pValue), '-b', str(bValue), '-s', sfValue, '-pm', stationaryValue], startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar'] + self.learningCmdArgs, startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
         self.learnedsdtDBN_text = p.stdout.read()
+
+        p.terminate()
 
         printInfo = Label(self.submitionframe, text="sdtDBN was learned!")
         printInfo.grid(row=5, column=1, columnspan=3)
@@ -131,6 +135,8 @@ class LearnDBN:
         textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
         textInfo.grid(row=1, column=1, rowspan=27, padx=7)
         textInfo.insert(END, self.learnedsdtDBN_text)
+
+        self.tab3.getLearningCmdArgs(self.learningCmdArgs)
 
     def checkDynAtt(self, dynObsFileName):
 

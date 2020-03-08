@@ -1,15 +1,21 @@
 from tkinter import *
+from tkinter import scrolledtext
 
 from utils.ElemTwoInput import *
 from utils.ElemTwoSelect import *
 
+import subprocess
 import csv
+import os
 
 class Tab3:
 
     def __init__(self, mainFrame, width):
         self.framePredictSpecific = Frame(mainFrame, width=width)
-        self.framePredictSpecific.grid(row=1, column=1, rowspan=2)
+        self.framePredictSpecific.grid(row=1, column=1, rowspan=3)
+
+        self.frameInfResults = Frame(self.framePredictSpecific, width=width)
+        self.frameInfResults.grid(row=1, column=3, rowspan=27)
 
         # Create a Tkinter variable for available ids
         self.idTab3TkVar = StringVar(self.framePredictSpecific)
@@ -30,6 +36,71 @@ class Tab3:
         self.makeInfTab3.grid(row=6, column=1, columnspan=2, sticky = N+S+E+W)
 
     def onSubmit(self):
+
+        desiredID = self.idTab3TkVar.get()
+
+        auxDynInfFilename = 'auxDynInf.csv'
+        auxStaticInfFilename = 'auxStaticInf.csv'
+        auxInfVarFilename = 'auxInfVar.csv'
+
+
+        dynInfFile = open(self.dynObsInfFilename)
+        reader = csv.reader(dynInfFile, delimiter=',')
+        firstLine = next(reader)
+        desiredLineDyn = []
+        for row in reader:
+            if(row[0] == desiredID ):
+                desiredLineDyn = row
+                break
+        dynInfFile.close()
+
+        with open(auxDynInfFilename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(firstLine)
+            writer.writerow(desiredLineDyn)
+
+        staticInfFile = open(self.staticObsInfFilename)
+        reader = csv.reader(staticInfFile, delimiter=',')
+        firstLine = next(reader)
+        desiredLineStatic = []
+        for row in reader:
+            if(row[0] == desiredID ):
+                desiredLineStatic = row
+                break
+        staticInfFile.close()
+
+        with open(auxStaticInfFilename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(firstLine)
+            writer.writerow(desiredLineStatic)
+        
+        infAttInList = [self.attTab3TkVar.get(), self.timestepTab3.entry.get() ]
+
+        with open(auxInfVarFilename, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(infAttInList)
+
+        infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', 'distrib' ]
+
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar']  + self.learningCmdArgs + infCmdArgs , startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+        
+        self.infResult = p.stdout.read()
+
+        p.terminate()
+        os.remove(auxDynInfFilename)
+        os.remove(auxStaticInfFilename)
+        os.remove(auxInfVarFilename)
+
+        for widget in self.frameInfResults.winfo_children():
+             widget.destroy()
+
+        textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=27, width=45)
+        textInfo.grid(row=1, column=4, rowspan=27, padx=7)
+        textInfo.insert(END, self.infResult)
+
         return
 
     def changeAttOptions(self, newOptionsList):
@@ -64,4 +135,8 @@ class Tab3:
 
         self.changeIdsOptions(idList)
 
+        return
+
+    def getLearningCmdArgs(self, learningCmdArgs):
+        self.learningCmdArgs = learningCmdArgs
         return
