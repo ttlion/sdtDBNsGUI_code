@@ -40,11 +40,11 @@ tabControl = ttk.Notebook(root)
 #########################################
 # Create the several tabs
 
-tab1 = Tab1(tabControl, 200)
-tab2 = Tab2(tabControl, 200)
-tab3 = Tab3(tabControl, 200)
-tab4 = Tab4(tabControl, 200)
 tab5 = Tab5(tabControl, 200)
+tab4 = Tab4(tabControl, 200)
+tab3 = Tab3(tabControl, 200)
+tab2 = Tab2(tabControl, 200, tab3)
+tab1 = Tab1(tabControl, 200, tab3)
 
 #########################################
 # Create TAB menu

@@ -3,12 +3,17 @@ from tkinter import filedialog
 from tkinter import scrolledtext
 
 import subprocess
+import csv
 
 from ..tab1.PageElements import *
 
+from tabs.tab3 import *
+
 class LearnDBN:
 
-    def __init__(self, superFrame, message, maxWidth, row, column, pageElements):
+    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab3):
+        self.tab3 = tab3
+
         self.superFrame = superFrame
         self.row = row
         self.column = column
@@ -26,6 +31,9 @@ class LearnDBN:
         self.presentDBNFrame = Frame(superFrame, width=50)
         self.presentDBNFrame.grid(row=1, column=5, rowspan=10)
 
+        self.presentDBNAttsFrame = Frame(superFrame, width=50)
+        self.presentDBNAttsFrame.grid(row=1, column=4, rowspan=10)
+
     def onSubmit(self):
         for widget in self.submitionframe.winfo_children():
             widget.destroy()
@@ -42,12 +50,31 @@ class LearnDBN:
             printInfo.grid(row=3, column=1, columnspan=3)
             return
 
+        self.checkDynAtt(dynObsFileName)
+
+        self.tab3.changeAttOptions(self.dynAttList)
+
         staticObsFileName = self.pageElements.getElem("staticObs").FileName
         if(staticObsFileName == "Not yet selected!"):
             printInfo = Label(self.submitionframe, text="Static observations file not given!", fg="red")
             printInfo.grid(row=3, column=1, columnspan=3)
             return
         
+        self.checkstaticAtt(staticObsFileName)
+
+        for widget in self.presentDBNAttsFrame.winfo_children():
+            widget.destroy()
+
+        textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=27, width=15)
+        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo.insert(END, "Dynamic Atts:\n")
+        for element in self.dynAttList:
+            textInfo.insert(END, element + "\n")
+
+        textInfo.insert(END, "\nStatic Atts:\n")
+        for element in self.staticAttList:
+            textInfo.insert(END, element + "\n")
+
         markovLag = int( self.pageElements.getElem("markovLag").entry.get() )
         if(markovLag <= 0 ):
             printInfo = Label(self.submitionframe, text="Markov lag must be > 0 !", fg="red")
@@ -103,3 +130,39 @@ class LearnDBN:
         textInfo.grid(row=1, column=1, rowspan=27, padx=7)
         textInfo.insert(END, self.learnedsdtDBN_text)
 
+    def checkDynAtt(self, dynObsFileName):
+
+        dynAttFile = open(dynObsFileName)
+
+        reader = csv.reader(dynAttFile, delimiter=',')
+
+        firstLine = next(reader)
+
+        self.dynAttList = []
+        
+        for element in firstLine[1:]:
+            if(element.find('__0') == -1):
+                break
+            else:
+                self.dynAttList.append( element.split('__0')[0] )
+
+        dynAttFile.close()
+
+        return
+
+    def checkstaticAtt(self, staticObsFileName):
+        
+        staticAttFile = open(staticObsFileName)
+
+        reader = csv.reader(staticAttFile, delimiter=',')
+
+        firstLine = next(reader)
+
+        self.staticAttList = []
+        
+        for element in firstLine[1:]:
+            self.staticAttList.append(element)
+
+        staticAttFile.close()
+
+        return
