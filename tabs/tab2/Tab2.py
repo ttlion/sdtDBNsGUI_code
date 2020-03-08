@@ -6,8 +6,9 @@ from utils.ElemTwoSelect import *
 
 class Tab2:
 
-    def __init__(self, mainFrame, width, tab3):
+    def __init__(self, mainFrame, width, tab3, tab4):
         self.tab3 = tab3
+        self.tab4 = tab4
 
         self.frameObsInf = Frame(mainFrame, width=width)
         self.frameObsInf.grid(row=1, column=1, rowspan=2)
@@ -29,6 +30,7 @@ class Tab2:
 
     def onSubmit(self):
         self.tab3.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName, self.modeInfTkVar.get())
+        self.tab4.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName, self.modeInfTkVar.get())
         return
 
 

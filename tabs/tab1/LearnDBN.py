@@ -11,8 +11,9 @@ from tabs.tab3 import *
 
 class LearnDBN:
 
-    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab3):
+    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab3, tab4):
         self.tab3 = tab3
+        self.tab4 = tab4
 
         self.superFrame = superFrame
         self.row = row
@@ -53,6 +54,7 @@ class LearnDBN:
         self.checkDynAtt(dynObsFileName)
 
         self.tab3.changeAttOptions(self.dynAttList)
+        self.tab4.changeAttOptions(self.dynAttList)
 
         staticObsFileName = self.pageElements.getElem("staticObs").FileName
         if(staticObsFileName == "Not yet selected!"):

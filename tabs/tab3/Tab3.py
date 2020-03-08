@@ -64,6 +64,4 @@ class Tab3:
 
         self.changeIdsOptions(idList)
 
-        print(idList)
-
         return
