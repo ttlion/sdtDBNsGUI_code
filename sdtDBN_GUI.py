@@ -1,6 +1,8 @@
 #########################################
 # Imports
 
+from os import path
+
 from tkinter import *
 from tkinter import filedialog
 from tkinter import ttk
@@ -28,6 +30,9 @@ from tabs.tab5.Tab5 import *
 
 root = Tk()
 root.title("sdtDBNs GUI")
+
+if (path.exists("ist_logo_icon.ico")): # Just safety guard
+    root.iconbitmap("ist_logo_icon.ico")
 
 #########################################
 # Main menu bar
