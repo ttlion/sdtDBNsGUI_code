@@ -1,1 +1,4 @@
 !*.exe
+build/
+__pycache__/
+sdtDBN_GUI.spec
