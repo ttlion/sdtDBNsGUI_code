@@ -1,2 +1,2 @@
 # sdtDBNsGUI
-Graphical User Interface to use the sdtDBN program
+Graphical User Interface to use the sdtDBN framework
