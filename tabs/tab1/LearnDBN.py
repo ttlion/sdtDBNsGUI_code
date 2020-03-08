@@ -86,12 +86,12 @@ class LearnDBN:
         printInfo = Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN")
         printInfo.grid(row=4, column=1, columnspan=3)
 
-        ## Call sdtDBN program and put output in txt file for future usage
-        fileWithDBN = open("sdtDBN_output.txt", "w")
+        startupinfo = subprocess.STARTUPINFO()
+        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-        subprocess.call(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-i', dynObsFileName, '-is', staticObsFileName, '-m', str(markovLag), '-p', str(pValue), '-b', str(bValue), '-s', sfValue, '-pm', stationaryValue], stdout=fileWithDBN)
+        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-i', dynObsFileName, '-is', staticObsFileName, '-m', str(markovLag), '-p', str(pValue), '-b', str(bValue), '-s', sfValue, '-pm', stationaryValue], startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
-        fileWithDBN.close()
+        self.learnedsdtDBN_text = p.stdout.read()
 
         printInfo = Label(self.submitionframe, text="sdtDBN was learned!")
         printInfo.grid(row=5, column=1, columnspan=3)
@@ -99,14 +99,7 @@ class LearnDBN:
         for widget in self.presentDBNFrame.winfo_children():
             widget.destroy()
 
-        fileWithDBN = open("sdtDBN_output.txt", "r")
-
-        num_lines = sum(1 for line in fileWithDBN)
-        fileWithDBN.seek(0)
-        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=num_lines, width=45)
-        textInfo.grid(row=1, column=1, rowspan=num_lines, padx=7)
-        textInfo.insert(END, fileWithDBN.read())
-
-
-        fileWithDBN.close()
+        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
+        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo.insert(END, self.learnedsdtDBN_text)
 

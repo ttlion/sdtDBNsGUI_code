@@ -1,4 +1,5 @@
 from tkinter import *
+import sys
 
 #########################################
 # Menu bar class
@@ -14,7 +15,7 @@ class MyMenu:
 
         self.filemenu.add_separator()
 
-        self.filemenu.add_command(label="Exit", command=exit)
+        self.filemenu.add_command(label="Exit", command=sys.exit)
 
         self.menubar.add_cascade(label="File", menu=self.filemenu)
 
