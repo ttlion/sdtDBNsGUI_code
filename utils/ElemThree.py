@@ -19,7 +19,7 @@ class ElemThree:
 
     def getFilePath(self):
         self.FileName = filedialog.askopenfilename( initialdir = ".", title = "Select file", 
-                                                filetypes = ( ("csv files","*.csv"),("all files","*.*") ) )
+                                                filetypes = [("csv files", "*.csv" )]  )
         
         self.pathLabel.destroy()
         self.pathLabel = Label(self.frame, text=self.FileName)
