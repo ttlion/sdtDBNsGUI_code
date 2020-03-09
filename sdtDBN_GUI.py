@@ -34,6 +34,10 @@ root.title("sdtDBNs GUI")
 if (path.exists("ist_logo_icon.ico")): # Just safety guard
     root.iconbitmap("ist_logo_icon.ico")
 
+# Just styling, after all page logic is done I will waste time on this
+s = ttk.Style()
+s.theme_use('clam')
+
 #########################################
 # Main menu bar
 windowMenu = MyMenu(root)

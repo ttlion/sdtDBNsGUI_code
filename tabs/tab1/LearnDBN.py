@@ -137,6 +137,7 @@ class LearnDBN:
         textInfo.insert(END, self.learnedsdtDBN_text)
 
         self.tab3.getLearningCmdArgs(self.learningCmdArgs)
+        self.tab4.getLearningCmdArgs(self.learningCmdArgs)
 
     def checkDynAtt(self, dynObsFileName):
 
