@@ -18,21 +18,33 @@ class Tab5:
         self.desiredModeTab5TkVar = StringVar(self.framePredictMany)
         self.desiredModeTab5Choices = [ 'attribute inference', 'progression until timestep' ]
 
-        self.desiredModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired mode: ", 35, self.desiredModeTab5TkVar, 
+        self.desiredModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired mode: ", 25, self.desiredModeTab5TkVar, 
                                                 self.desiredModeTab5Choices, self.desiredModeTab5Choices[0], 1, 1 )
 
         # This is selected by default
-        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 2, 1, "File with vars to inference: ", "Not yet selected!", 35)
+        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", 25)
 
         # When this var changes, it should be created the proper box
         self.desiredModeTab5TkVar.trace("w", self.createProperBox)
 
+        # Create a Tkinter variable for the modes
+        self.estimModeTab5TkVar = StringVar(self.framePredictMany)
+        self.estimModeTab5Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
+
+        self.estimModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired estimation mode: ", 25, self.estimModeTab5TkVar, self.estimModeTab5Choices, self.estimModeTab5Choices[0], 2, 1 )
+
+        self.estimModesDict = {
+            'Distribution' : 'distrib',
+            'Most Probable' : 'mostProb',
+            'Random Estimation using probability distributions' : 'distrSampl'
+        }
+
         # Create a Tkinter variable for output filename
-        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", 35, 15, 3, 1)
+        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", 25, 25, 4, 1)
 
         # Button to submit, making inference
-        self.makeInfTab5 = Button(self.framePredictMany, text = "Make inference", borderwidth = 10, width=35, command = self.onSubmit)
-        self.makeInfTab5.grid(row=4, column=1, columnspan=3, sticky = N+S+E+W)
+        self.makeInfTab5 = Button(self.framePredictMany, text = "Make inference", borderwidth = 10, width=25, command = self.onSubmit)
+        self.makeInfTab5.grid(row=5, column=1, columnspan=3, sticky = N+S+E+W)
 
 
     def createProperBox(self, *args):
@@ -41,10 +53,10 @@ class Tab5:
 
         if(self.desiredModeTab5TkVar.get() == 'attribute inference' ):
             # Create variable to insert file with vars to inference
-            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 2, 1, "File with vars to inference: ", "Not yet selected!", 35)
+            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", 35)
         else:
             # Create a Tkinter variable for timesteps
-            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", 35, 3, 2, 1)
+            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", 35, 3, 3, 1)
 
     def onSubmit(self):
         return

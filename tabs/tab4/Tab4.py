@@ -22,22 +22,22 @@ class Tab4:
         self.idTab4TkVar = StringVar(self.framePredictProgres)
         self.idTab4Choices = [ 'Inference observations not given!' ]
 
-        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", 20, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
+        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", 25, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
 
         # Create a Tkinter variable for available attributes
         self.attTab4TkVar = StringVar(self.framePredictProgres)
         self.attTab4Choices = [ 'There is not an sdtDBN learned!' ]
 
-        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", 20, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
+        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", 25, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
 
         # Create a Tkinter variable for timesteps
-        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", 20, 5, 3, 1)
+        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", 25, 5, 3, 1)
 
         # Create a Tkinter variable for the modes
         self.modeTab4TkVar = StringVar(self.framePredictProgres)
         self.modeTab4Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
 
-        self.modeTab4 = ElemTwoSelect(self.framePredictProgres, "Desired mode: ", 20, self.modeTab4TkVar, self.modeTab4Choices, self.modeTab4Choices[0], 4, 1 )
+        self.modeTab4 = ElemTwoSelect(self.framePredictProgres, "Desired estimation mode: ", 25, self.modeTab4TkVar, self.modeTab4Choices, self.modeTab4Choices[0], 4, 1 )
 
         self.modesDict = {
             'Distribution' : 'distrib',
@@ -46,7 +46,7 @@ class Tab4:
         }
 
         # Button to submit, making inference
-        self.makeInfTab4 = Button(self.framePredictProgres, text = "Make inference", borderwidth = 10, width=20, command = self.onSubmit)
+        self.makeInfTab4 = Button(self.framePredictProgres, text = "Make inference", borderwidth = 10, width=25, command = self.onSubmit)
         self.makeInfTab4.grid(row=5, column=1, columnspan=2, sticky = N+S+E+W)
 
     def changeAttOptions(self, newOptionsList):
