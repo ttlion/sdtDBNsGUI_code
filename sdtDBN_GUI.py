@@ -60,7 +60,7 @@ tab1 = Tab1(tabControl, 200, tab3, tab4)
 
 tabControl.add(tab1.dbnLearnFrame, text="Learn DBN from data")
 tabControl.add(tab2.frameObsInf, text="Observations to Inference")
-tabControl.add(tab3.framePredictSpecific, text="Predict attribute value")
+tabControl.add(tab3.framePredictSpecific, text="Predict attribute distribution")
 tabControl.add(tab4.framePredictProgres, text="Predict progression")
 tabControl.add(tab5.framePredictMany, text="Predictions for many IDs")
 tabControl.grid(row=1, column=1, rowspan=10)

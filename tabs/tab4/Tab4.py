@@ -33,9 +33,21 @@ class Tab4:
         # Create a Tkinter variable for timesteps
         self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", 20, 5, 3, 1)
 
+        # Create a Tkinter variable for the modes
+        self.modeTab4TkVar = StringVar(self.framePredictProgres)
+        self.modeTab4Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
+
+        self.modeTab4 = ElemTwoSelect(self.framePredictProgres, "Desired mode: ", 20, self.modeTab4TkVar, self.modeTab4Choices, self.modeTab4Choices[0], 4, 1 )
+
+        self.modesDict = {
+            'Distribution' : 'distrib',
+            'Most Probable' : 'mostProb',
+            'Random Estimation using probability distributions' : 'distrSampl'
+        }
+
         # Button to submit, making inference
         self.makeInfTab4 = Button(self.framePredictProgres, text = "Make inference", borderwidth = 10, width=20, command = self.onSubmit)
-        self.makeInfTab4.grid(row=6, column=1, columnspan=2, sticky = N+S+E+W)
+        self.makeInfTab4.grid(row=5, column=1, columnspan=2, sticky = N+S+E+W)
 
     def changeAttOptions(self, newOptionsList):
 
@@ -135,7 +147,7 @@ class Tab4:
                         i+=1
 
 
-        infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', 'distrib' ]
+        infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
 
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
