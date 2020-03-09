@@ -8,10 +8,12 @@ import csv
 from ..tab1.PageElements import *
 
 from tabs.tab3 import *
+from tabs.tab2 import *
 
 class LearnDBN:
 
-    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab3, tab4, tab5):
+    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab2, tab3, tab4, tab5):
+        self.tab2 = tab2
         self.tab3 = tab3
         self.tab4 = tab4
         self.tab5 = tab5
@@ -36,6 +38,24 @@ class LearnDBN:
         self.presentDBNAttsFrame = Frame(superFrame, width=50)
         self.presentDBNAttsFrame.grid(row=1, column=4, rowspan=10)
 
+        self.dynAttList = []
+        self.staticAttList = []
+
+        self.sfDict = {
+            'Log-Likelihood (LL)' : 'll',
+            'Minimum Description Length (MDL)' : 'mdl'
+        }
+
+        self.statDict = {
+            'yes' : '',
+            'no' : '-ns'
+        }
+
+        self.statDictBool = {
+            'yes' : True,
+            'no' : False
+        }
+
     def onSubmit(self):
         for widget in self.submitionframe.winfo_children():
             widget.destroy()
@@ -47,77 +67,33 @@ class LearnDBN:
         printInfo.grid(row=2, column=1, columnspan=3)
 
         dynObsFileName = self.pageElements.getElem("dynObs").FileName
-        if(dynObsFileName == "Not yet selected!"):
-            printInfo = Label(self.submitionframe, text="Dynamic observations file not given!", fg="red")
-            printInfo.grid(row=3, column=1, columnspan=3)
+        if(self.checkDynAtt(dynObsFileName) == False):
             return
-
-        self.checkDynAtt(dynObsFileName)
-
-        self.tab3.changeAttOptions(self.dynAttList)
-        self.tab4.changeAttOptions(self.dynAttList)
-        self.tab5.changeAttributes(self.dynAttList)
 
         staticObsFileName = self.pageElements.getElem("staticObs").FileName
-        if(staticObsFileName == "Not yet selected!"):
-            printInfo = Label(self.submitionframe, text="Static observations file not given!", fg="red")
-            printInfo.grid(row=3, column=1, columnspan=3)
+
+        self.hasStatic = self.checkstaticAtt(staticObsFileName)
+
+        if ( self.checkEntryArgs() == False):
             return
+
+        markovLag = self.pageElements.getElem("markovLag").entry.get()
+        pValue = self.pageElements.getElem("pValue").entry.get()
+
+        if(self.hasStatic == True):
+            bValue = self.pageElements.getElem("bValue").entry.get()
         
-        self.checkstaticAtt(staticObsFileName)
-
-        for widget in self.presentDBNAttsFrame.winfo_children():
-            widget.destroy()
-
-        textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=27, width=15)
-        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
-        textInfo.insert(END, "Dynamic Atts:\n")
-        for element in self.dynAttList:
-            textInfo.insert(END, element + "\n")
-
-        textInfo.insert(END, "\nStatic Atts:\n")
-        for element in self.staticAttList:
-            textInfo.insert(END, element + "\n")
-
-        markovLag = int( self.pageElements.getElem("markovLag").entry.get() )
-        if(markovLag <= 0 ):
-            printInfo = Label(self.submitionframe, text="Markov lag must be > 0 !", fg="red")
-            printInfo.grid(row=3, column=1, columnspan=3)
-            return
-        
-        pValue = int ( self.pageElements.getElem("pValue").entry.get() )
-        if(pValue <= 0 ):
-            printInfo = Label(self.submitionframe, text="Number of parents from past must be > 0 !", fg="red")
-            printInfo.grid(row=3, column=1, columnspan=3)
-            return
-        
-        bValue = int ( self.pageElements.getElem("bValue").entry.get() )
-        if(bValue < 0 ):
-            printInfo = Label(self.submitionframe, text="Number of static parents must be >= 0 !", fg="red")
-            printInfo.grid(row=3, column=1, columnspan=3)
-            return
-
-        sfValue = self.pageElements.getElem("sfValue").tkVar.get()
-        if(sfValue == "Log-Likelihood (LL)"):
-            sfValue = "ll"
-        else:
-            sfValue = "mdl"
-
-        stationaryValue = self.pageElements.getElem("stationaryValue").tkVar.get()
-        if(stationaryValue == "yes"):
-            stationaryValue = ""
-        else:
-            stationaryValue = "-ns"
-
-        printInfo = Label(self.submitionframe, text="All inputs given, checking their format")
-        printInfo.grid(row=3, column=1, columnspan=3)
-
-        ## TODO: Check if all inputs in proper format
+        sfValue = self.sfDict.get(self.pageElements.getElem("sfValue").tkVar.get())
+        stationaryValue = self.statDict.get(self.pageElements.getElem("stationaryValue").tkVar.get())
+        self.isStationary = self.statDictBool.get(self.pageElements.getElem("stationaryValue").tkVar.get())
 
         printInfo = Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN")
         printInfo.grid(row=4, column=1, columnspan=3)
 
-        self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', str(markovLag), '-p', str(pValue), '-b', str(bValue), '-s', sfValue, '-pm', stationaryValue]
+        if(self.hasStatic == True):
+            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue]
+        else:
+            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue]
 
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -131,18 +107,16 @@ class LearnDBN:
         printInfo = Label(self.submitionframe, text="sdtDBN was learned!")
         printInfo.grid(row=5, column=1, columnspan=3)
 
-        for widget in self.presentDBNFrame.winfo_children():
-            widget.destroy()
+        self.presentOutputToUser()
+        self.giveArgsToOtherTabs()
 
-        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
-        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
-        textInfo.insert(END, self.learnedsdtDBN_text)
-
-        self.tab3.getLearningCmdArgs(self.learningCmdArgs)
-        self.tab4.getLearningCmdArgs(self.learningCmdArgs)
-        self.tab5.getLearningCmdArgs(self.learningCmdArgs)
 
     def checkDynAtt(self, dynObsFileName):
+
+        if(dynObsFileName == "Not yet selected!" or dynObsFileName == ""):
+            printInfo = Label(self.submitionframe, text="Dynamic observations file not given!", fg="red")
+            printInfo.grid(row=3, column=1, columnspan=3)
+            return False
 
         dynAttFile = open(dynObsFileName)
 
@@ -160,9 +134,13 @@ class LearnDBN:
 
         dynAttFile.close()
 
-        return
+        return True
 
     def checkstaticAtt(self, staticObsFileName):
+        if(staticObsFileName == "Not yet selected!" or staticObsFileName == ""):
+            printInfo = Label(self.submitionframe, text="Static observations file not given!\nA DBN only with dynamic attributes will be learned!", fg="orange")
+            printInfo.grid(row=3, column=1, columnspan=3)
+            return False
         
         staticAttFile = open(staticObsFileName)
 
@@ -177,4 +155,76 @@ class LearnDBN:
 
         staticAttFile.close()
 
-        return
+        return True
+    
+    def checkEntryArgs(self):
+        
+        if (self.hasStatic == True):
+            errorMessagesDict = {
+                'markovLag' : ['Markov lag must be > 0 !', 1],
+                'pValue' : ['Number of parents from past must be > 0 !', 1],
+                'bValue' : ['Number of static parents must be >= 0 !', 0]
+            }
+        else:
+            errorMessagesDict = {
+                'markovLag' : ['Markov lag must be > 0 !', 1],
+                'pValue' : ['Number of parents from past must be > 0 !', 1]
+            }
+
+        for key, value in errorMessagesDict.items():
+            if(self.is_integer(self.pageElements.getElem(key).entry.get()) == False):
+                printInfo = Label(self.submitionframe, text = key + " is not an integer!", fg="red")
+                printInfo.grid(row=3, column=1, columnspan=3)
+                return False
+
+            number = int( self.pageElements.getElem(key).entry.get() )
+            if(number < value[1] ):
+                printInfo = Label(self.submitionframe, text=value[0], fg="red")
+                printInfo.grid(row=3, column=1, columnspan=3)
+                return False
+
+        return True
+
+    def is_integer(self, value: str) -> bool:
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
+
+    def presentOutputToUser(self):
+        self.presentAttsToUser()
+
+        for widget in self.presentDBNFrame.winfo_children():
+            widget.destroy()
+
+        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
+        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo.insert(END, self.learnedsdtDBN_text)
+
+    def presentAttsToUser(self):
+        for widget in self.presentDBNAttsFrame.winfo_children():
+            widget.destroy()
+
+        textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=27, width=15)
+        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo.insert(END, "Dynamic Atts:\n")
+        for element in self.dynAttList:
+            textInfo.insert(END, element + "\n")
+
+        if(self.hasStatic == True):
+            textInfo.insert(END, "\nStatic Atts:\n")
+            for element in self.staticAttList:
+                textInfo.insert(END, element + "\n")
+
+    def giveArgsToOtherTabs(self):
+
+        self.tab2.setStatic(self.hasStatic)
+
+        self.tab3.changeAttOptions(self.dynAttList)
+        self.tab4.changeAttOptions(self.dynAttList)
+        self.tab5.changeAttributes(self.dynAttList)
+
+        self.tab3.getLearningCmdArgs(self.learningCmdArgs)
+        self.tab4.getLearningCmdArgs(self.learningCmdArgs)
+        self.tab5.getLearningCmdArgs(self.learningCmdArgs)
