@@ -13,7 +13,8 @@ from tabs.tab1.LearnDBN import *
 
 class Tab1:
 
-    def __init__(self, mainFrame, width, tab3, tab4, tab5):
+    def __init__(self, mainFrame, width, tab2, tab3, tab4, tab5):
+        self.tab2 = tab2
         self.tab3 = tab3
         self.tab4 = tab4
         self.tab5 = tab5
@@ -53,4 +54,4 @@ class Tab1:
         self.pageElemts.addElem("sfValue", self.sf)
         self.pageElemts.addElem("stationaryValue", self.stationary)
 
-        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 8, 1, self.pageElemts, tab3, tab4, tab5)
+        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 8, 1, self.pageElemts, tab2, tab3, tab4, tab5)

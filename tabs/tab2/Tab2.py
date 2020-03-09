@@ -28,6 +28,12 @@ class Tab2:
         self.tab5.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName)
         return
 
+    def setStatic(self, hasStatic: bool):
+        self.staticObsInf.destroy()
+        if (hasStatic == True):
+            self.staticObsInf = ElemThree(self.frameObsInf, 2, 1, "File with static observations for inference: ", "Not yet selected!", 35)
+        return
+
 
 
 
