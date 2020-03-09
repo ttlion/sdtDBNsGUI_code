@@ -53,11 +53,10 @@ class Tab4:
 
         self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", 20, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
 
-    def getInfSpecs(self, dynObsInfFilename, staticObsInfFilename, estimationMode ):
+    def getInfSpecs(self, dynObsInfFilename, staticObsInfFilename):
 
         self.dynObsInfFilename = dynObsInfFilename
         self.staticObsInfFilename = staticObsInfFilename
-        self.estimationMode = estimationMode
         
         dynInfFile = open(self.dynObsInfFilename)
         reader = csv.reader(dynInfFile, delimiter=',')
