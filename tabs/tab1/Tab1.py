@@ -58,6 +58,7 @@ class Tab1:
         self.pageElemts.addElem("sfValue", self.sf)
         self.pageElemts.addElem("stationaryValue", self.stationary)
 
-        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "File to save the learned sdtDBN: ", self.widthLeft, self.widthCenter, 8, 1, 'exampleFile.txt')
+        self.fileToSave = ElemTwoInput(self.dbnLearnFrame, "File to save the learned sdtDBN: ", self.widthLeft, self.widthCenter, 8, 1, 'exampleFile.txt')
+        self.pageElemts.addElem("fileToSave", self.fileToSave)
 
         self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 9, 1, self.pageElemts, tab2, tab3, tab4, tab5)

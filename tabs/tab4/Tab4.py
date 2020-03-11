@@ -59,7 +59,7 @@ class Tab4:
 
         self.attTab4Choices = ['all'] + newOptionsList
 
-        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", 20, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
+        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
 
     def changeIdsOptions(self, newOptionsList):
 
@@ -67,7 +67,7 @@ class Tab4:
 
         self.idTab4Choices = newOptionsList
 
-        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", 20, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
+        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", self.widthLeft, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
 
     def getInfSpecs(self, dynObsInfFilename, staticObsInfFilename):
 

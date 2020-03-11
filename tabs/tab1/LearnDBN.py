@@ -61,6 +61,12 @@ class LearnDBN:
         for widget in self.submitionframe.winfo_children():
             widget.destroy()
 
+        for widget in self.presentDBNAttsFrame.winfo_children():
+            widget.destroy()
+
+        for widget in self.presentDBNFrame.winfo_children():
+            widget.destroy()
+
         self.submitButton = ttk.Button(self.submitionframe, text = self.message, width=self.width, command=self.onSubmit)
         self.submitButton.grid(row=1, column=1, columnspan=3, sticky = N+S+E+W)
 
@@ -88,13 +94,18 @@ class LearnDBN:
         stationaryValue = self.statDict.get(self.pageElements.getElem("stationaryValue").tkVar.get())
         self.isStationary = self.statDictBool.get(self.pageElements.getElem("stationaryValue").tkVar.get())
 
+        fileToSave = self.pageElements.getElem("fileToSave").entry.get()
+
+        if(self.checkFileToSave(fileToSave) == False):
+            return
+
         printInfo = ttk.Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN", style="ok.TLabel")
         printInfo.grid(row=4, column=1, columnspan=3)
 
         if(self.hasStatic == True):
-            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', fileToSave]
         else:
-            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', fileToSave]
 
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -175,13 +186,13 @@ class LearnDBN:
         for key, value in errorMessagesDict.items():
             if(self.is_integer(self.pageElements.getElem(key).entry.get()) == False):
                 printInfo = ttk.Label(self.submitionframe, text = key + " is not an integer!", style="notok.TLabel")
-                printInfo.grid(row=3, column=1, columnspan=3)
+                printInfo.grid(row=4, column=1, columnspan=3)
                 return False
 
             number = int( self.pageElements.getElem(key).entry.get() )
             if(number < value[1] ):
                 printInfo = ttk.Label(self.submitionframe, text=value[0], style="notok.TLabel")
-                printInfo.grid(row=3, column=1, columnspan=3)
+                printInfo.grid(row=4, column=1, columnspan=3)
                 return False
 
         return True
@@ -192,20 +203,22 @@ class LearnDBN:
             return True
         except ValueError:
             return False
+    
+    def checkFileToSave(self, fileToSave):
+        if( fileToSave == '' ):
+            printInfo = ttk.Label(self.submitionframe, text="File to save sdtDBN was not specified!", style="notok.TLabel")
+            printInfo.grid(row=4, column=1, columnspan=3)
+            return False
+        return True
 
     def presentOutputToUser(self):
         self.presentAttsToUser()
-
-        for widget in self.presentDBNFrame.winfo_children():
-            widget.destroy()
 
         textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
         textInfo.grid(row=1, column=1, rowspan=27, padx=7)
         textInfo.insert(END, self.learnedsdtDBN_text)
 
     def presentAttsToUser(self):
-        for widget in self.presentDBNAttsFrame.winfo_children():
-            widget.destroy()
 
         textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=27, width=15)
         textInfo.grid(row=1, column=1, rowspan=27, padx=7)
