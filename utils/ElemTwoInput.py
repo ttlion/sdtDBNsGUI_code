@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 
 class ElemTwoInput:
 
@@ -7,12 +8,12 @@ class ElemTwoInput:
         self.row = row
         self.column = column
 
-        self.label = Label(frame, text=message, width=maxWidthText, anchor="e")
-        self.label.grid(row=self.row, column=self.column)
+        self.label = ttk.Label(frame, text = message, width = maxWidthText, anchor = "e", style = "ask.TLabel")
+        self.label.grid(row=self.row, column = self.column)
 
-        self.entry = Entry(frame, width=maxWidthEntry, borderwidth=3, justify="left")
+        self.entry = ttk.Entry(frame, width = maxWidthEntry, justify="left", font=("Times", 11, "bold"))
         self.entry.insert(0, 1)
-        self.entry.grid(row=self.row, column=self.column+1, sticky="W")
+        self.entry.grid(row=self.row, column = self.column+1, sticky="W", pady = 3)
     
     def destroy(self):
         self.label.destroy()

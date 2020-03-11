@@ -19,22 +19,26 @@ class Tab1:
         self.tab4 = tab4
         self.tab5 = tab5
 
+        self.widthLeft = 30
+        self.widthCenter = 15
+        self.widthInput = 4
+
         self.mainFrame = mainFrame
 
-        self.dbnLearnFrame = Frame(mainFrame, width=width)
+        self.dbnLearnFrame = ttk.Frame(mainFrame, width=width)
         self.dbnLearnFrame.grid(row=1, column=1, rowspan=10)
 
         self.pageElemts = PageElem()
 
-        self.dynObs = ElemThree(self.dbnLearnFrame, 1, 1, "File with dynamic observations: ", "Not yet selected!", 25)
-        self.staticObs = ElemThree(self.dbnLearnFrame, 2, 1, "File with static observations: ", "Not yet selected!", 25)
+        self.dynObs = ElemThree(self.dbnLearnFrame, 1, 1, "File with dynamic observations: ", "Not yet selected!", self.widthLeft, self.widthCenter )
+        self.staticObs = ElemThree(self.dbnLearnFrame, 2, 1, "File with static observations: ", "Not yet selected!", self.widthLeft, self.widthCenter)
 
         self.pageElemts.addElem("dynObs", self.dynObs)
         self.pageElemts.addElem("staticObs", self.staticObs)
 
-        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "Markov lag: ", 25, 5, 3, 1)
-        self.maxParentsPast = ElemTwoInput(self.dbnLearnFrame, "Max parents from past: ", 25, 5, 4, 1)
-        self.maxStaticParents = ElemTwoInput(self.dbnLearnFrame, "Max static parents: ", 25, 5, 5, 1)
+        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "Markov lag: ", self.widthLeft, self.widthInput, 3, 1)
+        self.maxParentsPast = ElemTwoInput(self.dbnLearnFrame, "Max parents from past: ", self.widthLeft, self.widthInput, 4, 1)
+        self.maxStaticParents = ElemTwoInput(self.dbnLearnFrame, "Max static parents: ", self.widthLeft, self.widthInput, 5, 1)
 
         self.pageElemts.addElem("markovLag", self.markovLag)
         self.pageElemts.addElem("pValue", self.maxParentsPast)
@@ -48,8 +52,8 @@ class Tab1:
         self.statTkVar = StringVar(self.dbnLearnFrame)
         self.statChoices = [ 'yes', 'no' ]
 
-        self.sf = ElemTwoSelect(self.dbnLearnFrame, "Scoring Function: ", 25, self.sfTkVar, self.sfChoices, self.sfChoices[0], 6, 1 )
-        self.stationary = ElemTwoSelect(self.dbnLearnFrame, "Stationary sdtDBN?: ", 25, self.statTkVar, self.statChoices, self.statChoices[0], 7, 1 )
+        self.sf = ElemTwoSelect(self.dbnLearnFrame, "Scoring Function: ", self.widthLeft, self.sfTkVar, self.sfChoices, self.sfChoices[0], 6, 1 )
+        self.stationary = ElemTwoSelect(self.dbnLearnFrame, "Stationary sdtDBN?: ", self.widthLeft, self.statTkVar, self.statChoices, self.statChoices[0], 7, 1 )
 
         self.pageElemts.addElem("sfValue", self.sf)
         self.pageElemts.addElem("stationaryValue", self.stationary)

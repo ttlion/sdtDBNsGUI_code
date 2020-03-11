@@ -11,18 +11,22 @@ class Tab5:
 
     def __init__(self, mainFrame, width):
 
-        self.framePredictMany = Frame(mainFrame, width=width)
+        self.framePredictMany = ttk.Frame(mainFrame, width=width)
         self.framePredictMany.grid(row=1, column=1, rowspan=10)
+
+        self.widthLeft = 30
+        self.widthCenter = 15
+        self.widthInput = 4
 
         # Define desired mode
         self.desiredModeTab5TkVar = StringVar(self.framePredictMany)
-        self.desiredModeTab5Choices = [ 'attribute inference', 'progression until timestep' ]
+        self.desiredModeTab5Choices = [ 'Attribute inference', 'Progression until timestep' ]
 
-        self.desiredModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired mode: ", 25, self.desiredModeTab5TkVar, 
+        self.desiredModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired mode: ", self.widthLeft, self.desiredModeTab5TkVar, 
                                                 self.desiredModeTab5Choices, self.desiredModeTab5Choices[0], 1, 1 )
 
         # This is selected by default
-        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", 25)
+        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
 
         # When this var changes, it should be created the proper box
         self.desiredModeTab5TkVar.trace("w", self.createProperBox)
@@ -32,7 +36,7 @@ class Tab5:
         self.estimModeTab5Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
 
         # By default, Distribution is presented also because it is presented att inference as the mode
-        self.estimModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired estimation mode: ", 25, self.estimModeTab5TkVar, self.estimModeTab5Choices, self.estimModeTab5Choices[0], 2, 1 )
+        self.estimModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired estimation mode: ", self.widthLeft, self.estimModeTab5TkVar, self.estimModeTab5Choices, self.estimModeTab5Choices[0], 2, 1 )
 
         self.estimModesDict = {
             'Distribution' : 'distrib',
@@ -41,10 +45,10 @@ class Tab5:
         }
 
         # Create a Tkinter variable for output filename
-        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", 25, 25, 4, 1)
+        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", self.widthLeft, 25, 4, 1)
 
         # Button to submit, making inference
-        self.makeInfTab5 = Button(self.framePredictMany, text = "Make inference", borderwidth = 10, width=25, command = self.onSubmit)
+        self.makeInfTab5 = ttk.Button(self.framePredictMany, text = "Make inference", command = self.onSubmit)
         self.makeInfTab5.grid(row=5, column=1, columnspan=3, sticky = N+S+E+W)
 
 
@@ -53,20 +57,20 @@ class Tab5:
         self.timestepOrVarsToInf_Tab5.destroy()
         self.estimModeTab5.destroy()
 
-        if(self.desiredModeTab5TkVar.get() == 'attribute inference' ):
+        if(self.desiredModeTab5TkVar.get() == 'Attribute inference' ):
             # Create variable to insert file with vars to inference
-            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", 25)
+            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 3, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
 
             self.estimModeTab5Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
 
         else:
             # Create a Tkinter variable for timesteps
-            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", 25, 3, 3, 1)
+            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", self.widthLeft, self.widthInput, 3, 1)
 
             self.estimModeTab5Choices = [ 'Most Probable', 'Random Estimation using probability distributions' ]
 
         # Create estimModeTab5 with proper Choices
-        self.estimModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired estimation mode: ", 25, self.estimModeTab5TkVar, self.estimModeTab5Choices, self.estimModeTab5Choices[0], 2, 1 )
+        self.estimModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired estimation mode: ", self.widthLeft, self.estimModeTab5TkVar, self.estimModeTab5Choices, self.estimModeTab5Choices[0], 2, 1 )
 
         return
 
@@ -83,7 +87,7 @@ class Tab5:
         return
 
     def onSubmit(self):
-        if (self.desiredModeTab5TkVar.get() == 'attribute inference' ):
+        if (self.desiredModeTab5TkVar.get() == 'Attribute inference' ):
             infCmdArgs = ['-obs', self.dynObsInfFilename , '-obsStatic', self.staticObsInfFilename , '-inf', self.timestepOrVarsToInf_Tab5.FileName , '-infFmt', self.estimModesDict.get(self.estimModeTab5TkVar.get()), '-outInf', self.outputPathTab5.entry.get() ]
 
             startupinfo = subprocess.STARTUPINFO()

@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import filedialog
 from tkinter import scrolledtext
+from tkinter import ttk
 
 import subprocess
 import csv
@@ -26,16 +27,16 @@ class LearnDBN:
 
         self.pageElements = pageElements
         
-        self.submitionframe = Frame(superFrame, width=2000)
+        self.submitionframe = ttk.Frame(superFrame, width=2000)
         self.submitionframe.grid(row=self.row, column=self.column, columnspan=3)
 
-        self.submitButton = Button(self.submitionframe, text = message, borderwidth = 10, width=self.width, command=self.onSubmit)
+        self.submitButton = ttk.Button(self.submitionframe, text = message, width=self.width, command=self.onSubmit)
         self.submitButton.grid(row=1, column=1, columnspan=3, sticky = N+S+E+W)
 
-        self.presentDBNFrame = Frame(superFrame, width=50)
+        self.presentDBNFrame = ttk.Frame(superFrame, width=50)
         self.presentDBNFrame.grid(row=1, column=5, rowspan=10)
 
-        self.presentDBNAttsFrame = Frame(superFrame, width=50)
+        self.presentDBNAttsFrame = ttk.Frame(superFrame, width=50)
         self.presentDBNAttsFrame.grid(row=1, column=4, rowspan=10)
 
         self.dynAttList = []
@@ -60,10 +61,10 @@ class LearnDBN:
         for widget in self.submitionframe.winfo_children():
             widget.destroy()
 
-        self.submitButton = Button(self.submitionframe, text = self.message, borderwidth = 10, width=self.width, command=self.onSubmit)
+        self.submitButton = ttk.Button(self.submitionframe, text = self.message, width=self.width, command=self.onSubmit)
         self.submitButton.grid(row=1, column=1, columnspan=3, sticky = N+S+E+W)
 
-        printInfo = Label(self.submitionframe, text="Analyzing inputs")
+        printInfo = ttk.Label(self.submitionframe, text="Analyzing inputs", style="ok.TLabel")
         printInfo.grid(row=2, column=1, columnspan=3)
 
         dynObsFileName = self.pageElements.getElem("dynObs").FileName
@@ -87,7 +88,7 @@ class LearnDBN:
         stationaryValue = self.statDict.get(self.pageElements.getElem("stationaryValue").tkVar.get())
         self.isStationary = self.statDictBool.get(self.pageElements.getElem("stationaryValue").tkVar.get())
 
-        printInfo = Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN")
+        printInfo = ttk.Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN", style="ok.TLabel")
         printInfo.grid(row=4, column=1, columnspan=3)
 
         if(self.hasStatic == True):
@@ -104,7 +105,7 @@ class LearnDBN:
 
         p.terminate()
 
-        printInfo = Label(self.submitionframe, text="sdtDBN was learned!")
+        printInfo = ttk.Label(self.submitionframe, text="sdtDBN was learned!", style="ok.TLabel")
         printInfo.grid(row=5, column=1, columnspan=3)
 
         self.presentOutputToUser()
@@ -114,7 +115,7 @@ class LearnDBN:
     def checkDynAtt(self, dynObsFileName):
 
         if(dynObsFileName == "Not yet selected!" or dynObsFileName == ""):
-            printInfo = Label(self.submitionframe, text="Dynamic observations file not given!", fg="red")
+            printInfo = ttk.Label(self.submitionframe, text="Dynamic observations file not given!", style="notok.TLabel")
             printInfo.grid(row=3, column=1, columnspan=3)
             return False
 
@@ -138,7 +139,7 @@ class LearnDBN:
 
     def checkstaticAtt(self, staticObsFileName):
         if(staticObsFileName == "Not yet selected!" or staticObsFileName == ""):
-            printInfo = Label(self.submitionframe, text="Static observations file not given!\nA DBN only with dynamic attributes will be learned!", fg="orange")
+            printInfo = ttk.Label(self.submitionframe, text="Static observations file not given!\nA DBN only with dynamic attributes will be learned!", style="ok.TLabel", justify='center')
             printInfo.grid(row=3, column=1, columnspan=3)
             return False
         
@@ -173,13 +174,13 @@ class LearnDBN:
 
         for key, value in errorMessagesDict.items():
             if(self.is_integer(self.pageElements.getElem(key).entry.get()) == False):
-                printInfo = Label(self.submitionframe, text = key + " is not an integer!", fg="red")
+                printInfo = ttk.Label(self.submitionframe, text = key + " is not an integer!", style="notok.TLabel")
                 printInfo.grid(row=3, column=1, columnspan=3)
                 return False
 
             number = int( self.pageElements.getElem(key).entry.get() )
             if(number < value[1] ):
-                printInfo = Label(self.submitionframe, text=value[0], fg="red")
+                printInfo = ttk.Label(self.submitionframe, text=value[0], style="notok.TLabel")
                 printInfo.grid(row=3, column=1, columnspan=3)
                 return False
 

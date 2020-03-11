@@ -11,28 +11,32 @@ import os
 class Tab3:
 
     def __init__(self, mainFrame, width):
-        self.framePredictSpecific = Frame(mainFrame, width=width)
+        self.framePredictSpecific = ttk.Frame(mainFrame, width=width)
         self.framePredictSpecific.grid(row=1, column=1, rowspan=3)
 
-        self.frameInfResults = Frame(self.framePredictSpecific, width=width)
+        self.frameInfResults = ttk.Frame(self.framePredictSpecific, width=width)
         self.frameInfResults.grid(row=1, column=3, rowspan=27)
+
+        self.widthLeft = 30
+        self.widthCenter = 15
+        self.widthInput = 4
 
         # Create a Tkinter variable for available ids
         self.idTab3TkVar = StringVar(self.framePredictSpecific)
         self.idTab3Choices = [ 'Inference observations not given!' ]
 
-        self.idTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired id: ", 25, self.idTab3TkVar, self.idTab3Choices, self.idTab3Choices[0], 1, 1 )
+        self.idTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired id: ", self.widthLeft, self.idTab3TkVar, self.idTab3Choices, self.idTab3Choices[0], 1, 1 )
 
         # Create a Tkinter variable for available attributes
         self.attTab3TkVar = StringVar(self.framePredictSpecific)
         self.attTab3Choices = [ 'There is not an sdtDBN learned!' ]
 
-        self.attTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired attribute: ", 25, self.attTab3TkVar, self.attTab3Choices, self.attTab3Choices[0], 2, 1 )
+        self.attTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired attribute: ", self.widthLeft, self.attTab3TkVar, self.attTab3Choices, self.attTab3Choices[0], 2, 1 )
 
         # Create a Tkinter variable for timesteps
-        self.timestepTab3 = ElemTwoInput(self.framePredictSpecific, "Desired timestep: ", 25, 5, 3, 1)
+        self.timestepTab3 = ElemTwoInput(self.framePredictSpecific, "Desired timestep: ", self.widthLeft, self.widthInput, 3, 1)
 
-        self.makeInfTab3 = Button(self.framePredictSpecific, text = "Make inference", borderwidth = 10, width=25, command = self.onSubmit)
+        self.makeInfTab3 = ttk.Button(self.framePredictSpecific, text = "Make inference", command = self.onSubmit)
         self.makeInfTab3.grid(row=6, column=1, columnspan=2, sticky = N+S+E+W)
 
     def onSubmit(self):
@@ -109,7 +113,7 @@ class Tab3:
 
         self.attTab3Choices = newOptionsList
 
-        self.attTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired attribute: ", 20, self.attTab3TkVar, self.attTab3Choices, self.attTab3Choices[0], 2, 1 )
+        self.attTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired attribute: ", self.widthLeft, self.attTab3TkVar, self.attTab3Choices, self.attTab3Choices[0], 2, 1 )
 
     def changeIdsOptions(self, newOptionsList):
 
@@ -117,7 +121,7 @@ class Tab3:
 
         self.idTab3Choices = newOptionsList
 
-        self.idTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired id: ", 20, self.idTab3TkVar, self.idTab3Choices, self.idTab3Choices[0], 1, 1 )
+        self.idTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired id: ", self.widthLeft, self.idTab3TkVar, self.idTab3Choices, self.idTab3Choices[0], 1, 1 )
 
     def getInfSpecs(self, dynObsInfFilename, staticObsInfFilename):
 

@@ -34,11 +34,71 @@ root.title("sdtDBNs GUI")
 if (path.exists("ist_logo_icon.ico")): # Just safety guard
     root.iconbitmap("ist_logo_icon.ico")
 
-# Just styling, after all page logic is done I will waste time on this
+##################################################################################
+##################################################################################
+##################################################################################
+##################################################################################
+# Program styling definittions
+
+#########################################
+# Some fonts
+
+font_tabs = ("Times", 11)
+font_tabs_bold = ("Times", 10, "bold")
+
+font_bold = ("Times", 12, "bold")
+font_italic = ("Times", 11, "italic")
+
+font_insert = ("Times", 13, "bold")
+font_insertButton = ("Times", 14, "bold")
+
+font_ok_notok = ("Times", 11, "bold italic")
+
+#########################################
+# Creation of style object
+
 s = ttk.Style()
 s.theme_use('clam')
 
 #########################################
+# Tabs styling
+s.configure("TNotebook.Tab", padding = (10, 3, 10, 3), relief = "flat",  background = "#FF4500", font = font_tabs, bordercolor = "#FF007F", focuscolor = "None")
+s.map('TNotebook.Tab', background = [('selected','red')], font = [('selected', font_tabs_bold), ('active', font_tabs_bold)])
+
+#########################################
+# Notebook styling
+s.configure("TNotebook", background = "white", bordercolor = "#FF007F", padding = (5,5,5,5)) 
+
+#########################################
+# Frames styling
+s.configure("TFrame", background = "#FFCCCC") # Set all frames with same color
+
+#########################################
+# Styling of labels
+s.configure("ask.TLabel", background = "#FFCCCC", font = font_bold, foreground = "#FF4500")
+s.configure("filenames.TLabel", background = "#FFCCCC", font = font_italic)
+s.configure("ok.TLabel", background = "#FFCCCC", font = font_ok_notok, foreground = "green")
+s.configure("notok.TLabel", background = "#FFCCCC", font = font_ok_notok, foreground = "red")
+
+#########################################
+# Styling of entries
+s.configure("TEntry", background = "#FFCCCC", foreground = "#FF4500", fieldbackground = "#FFCCCC", bordercolor = "#FFCCCC")
+s.map("TEntry", fieldbackground = [('focus','white')] , foreground = [('focus','black')], bordercolor = [('focus','black')] )
+
+#########################################
+# Styling of buttons
+s.configure('TButton', background = '#FFCCCC', foreground = 'black', font = font_bold, bordercolor = "#FF4500", focuscolor = "None", padding = (0, 7, 0, 7))
+s.map('TButton', foreground = [('active','#FF4500')], font = [('active', font_insertButton)] ) 
+
+#########################################
+# Styling of option menus
+s.configure('TMenubutton', background = '#FFCCCC', foreground = 'black', font = font_bold, bordercolor = "#FF4500", focuscolor = "None", padding = (10, 10, 10, 10), arrowsize = 2)
+s.map('TMenubutton', foreground = [('active','#FF4500')]) 
+
+##################################################################################
+##################################################################################
+##################################################################################
+##################################################################################
 # Main menu bar
 windowMenu = MyMenu(root)
 

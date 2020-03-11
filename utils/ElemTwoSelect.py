@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 
 class ElemTwoSelect:
 
@@ -11,12 +12,11 @@ class ElemTwoSelect:
         self.tkVar.set(defaultChoice)
         self.choices = choices
 
-
-        self.label = Label(frame, text=message, width=maxWidthText, anchor="e")
+        self.label = ttk.Label(frame, text=message, width = maxWidthText, anchor="e", style="ask.TLabel")
         self.label.grid(row=self.row, column=self.column)
 
-        self.menu = OptionMenu(frame, self.tkVar, *self.choices)
-        self.menu.grid(row=self.row, column=self.column+1, sticky="W")
+        self.menu = ttk.OptionMenu(frame, self.tkVar, defaultChoice, *self.choices)
+        self.menu.grid(row=self.row, column=self.column+1, sticky="W", pady = 3)
 
     def destroy(self):
         self.label.destroy()
