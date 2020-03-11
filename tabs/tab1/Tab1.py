@@ -36,9 +36,9 @@ class Tab1:
         self.pageElemts.addElem("dynObs", self.dynObs)
         self.pageElemts.addElem("staticObs", self.staticObs)
 
-        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "Markov lag: ", self.widthLeft, self.widthInput, 3, 1)
-        self.maxParentsPast = ElemTwoInput(self.dbnLearnFrame, "Max parents from past: ", self.widthLeft, self.widthInput, 4, 1)
-        self.maxStaticParents = ElemTwoInput(self.dbnLearnFrame, "Max static parents: ", self.widthLeft, self.widthInput, 5, 1)
+        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "Markov lag: ", self.widthLeft, self.widthInput, 3, 1, 1)
+        self.maxParentsPast = ElemTwoInput(self.dbnLearnFrame, "Max parents from past: ", self.widthLeft, self.widthInput, 4, 1, 1)
+        self.maxStaticParents = ElemTwoInput(self.dbnLearnFrame, "Max static parents: ", self.widthLeft, self.widthInput, 5, 1, 1)
 
         self.pageElemts.addElem("markovLag", self.markovLag)
         self.pageElemts.addElem("pValue", self.maxParentsPast)
@@ -58,4 +58,6 @@ class Tab1:
         self.pageElemts.addElem("sfValue", self.sf)
         self.pageElemts.addElem("stationaryValue", self.stationary)
 
-        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 8, 1, self.pageElemts, tab2, tab3, tab4, tab5)
+        self.markovLag = ElemTwoInput(self.dbnLearnFrame, "File to save the learned sdtDBN: ", self.widthLeft, self.widthCenter, 8, 1, 'exampleFile.txt')
+
+        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 9, 1, self.pageElemts, tab2, tab3, tab4, tab5)

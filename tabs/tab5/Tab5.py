@@ -45,7 +45,7 @@ class Tab5:
         }
 
         # Create a Tkinter variable for output filename
-        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", self.widthLeft, 25, 4, 1)
+        self.outputPathTab5 = ElemTwoInput(self.framePredictMany, "Output filename: ", self.widthLeft, 25, 4, 1, 'exampleOut.csv')
 
         # Button to submit, making inference
         self.makeInfTab5 = ttk.Button(self.framePredictMany, text = "Make inference", command = self.onSubmit)
@@ -65,7 +65,7 @@ class Tab5:
 
         else:
             # Create a Tkinter variable for timesteps
-            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", self.widthLeft, self.widthInput, 3, 1)
+            self.timestepOrVarsToInf_Tab5 = ElemTwoInput(self.framePredictMany, "Maximum timestep: ", self.widthLeft, self.widthInput, 3, 1, 1)
 
             self.estimModeTab5Choices = [ 'Most Probable', 'Random Estimation using probability distributions' ]
 

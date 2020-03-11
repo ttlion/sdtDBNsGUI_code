@@ -34,7 +34,7 @@ class Tab3:
         self.attTab3 = ElemTwoSelect(self.framePredictSpecific, "Desired attribute: ", self.widthLeft, self.attTab3TkVar, self.attTab3Choices, self.attTab3Choices[0], 2, 1 )
 
         # Create a Tkinter variable for timesteps
-        self.timestepTab3 = ElemTwoInput(self.framePredictSpecific, "Desired timestep: ", self.widthLeft, self.widthInput, 3, 1)
+        self.timestepTab3 = ElemTwoInput(self.framePredictSpecific, "Desired timestep: ", self.widthLeft, self.widthInput, 3, 1, 1)
 
         self.makeInfTab3 = ttk.Button(self.framePredictSpecific, text = "Make inference", command = self.onSubmit)
         self.makeInfTab3.grid(row=6, column=1, columnspan=2, sticky = N+S+E+W)

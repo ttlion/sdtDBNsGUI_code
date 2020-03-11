@@ -35,7 +35,7 @@ class Tab4:
         self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
 
         # Create a Tkinter variable for timesteps
-        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", self.widthLeft, 5, 3, 1)
+        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", self.widthLeft, 5, 3, 1, 1)
 
         # Create a Tkinter variable for the modes
         self.modeTab4TkVar = StringVar(self.framePredictProgres)
