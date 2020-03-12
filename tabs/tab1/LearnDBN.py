@@ -233,13 +233,12 @@ class LearnDBN:
 
     def giveArgsToOtherTabs(self):
 
-        self.tab2.setStatic(self.hasStatic)
-        self.tab2.setDBNFile(self.fileToSave)
+        self.tab2.setDBNFile(self.fileToSave, self.hasStatic)
+        self.tab3.setDBNFile(self.fileToSave)
 
         self.tab3.changeAttOptions(self.dynAttList)
         self.tab4.changeAttOptions(self.dynAttList)
         self.tab5.changeAttributes(self.dynAttList)
 
-        self.tab3.getLearningCmdArgs(self.learningCmdArgs)
         self.tab4.getLearningCmdArgs(self.learningCmdArgs)
         self.tab5.getLearningCmdArgs(self.learningCmdArgs)

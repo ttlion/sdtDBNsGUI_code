@@ -48,7 +48,10 @@ class Tab2:
         self.tab5.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName)
         return
 
-    def setStatic(self, hasStatic: bool):
+    def setDBNFile(self, dbnFilename, hasStatic: bool):
+        self.showDBN.destroy()
+        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", dbnFilename, self.widthLeft,self.widthCenter, 1, 1)
+        
         self.hasStatic = hasStatic
 
         self.staticObsInf.destroy()
@@ -56,11 +59,6 @@ class Tab2:
 
         if (self.hasStatic == True):
             self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
-        return
-    
-    def setDBNFile(self, dbnFilename):
-        self.showDBN.destroy
-        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", dbnFilename, self.widthLeft,self.widthCenter, 1, 1)
         return
 
     def checkArgs(self):
