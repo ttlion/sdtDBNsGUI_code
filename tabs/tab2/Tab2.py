@@ -2,6 +2,7 @@ from tkinter import *
 
 from utils.ElemThree import *
 from utils.ElemTwoSelect import *
+from utils.ElemTwoPresent import *
 
 
 class Tab2:
@@ -16,29 +17,71 @@ class Tab2:
         self.widthInput = 4
         self.widthButton = 10
 
-        self.frameObsInf = ttk.Frame(mainFrame, width=width)
-        self.frameObsInf.grid(row=1, column=1, rowspan=2)
+        self.frameObsInf = ttk.Frame(mainFrame, width = width)
+        self.frameObsInf.grid(row=1, column=1, rowspan = 6)
+
+        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
 
         # Dynamic and static observations files to inference
-        self.dynObsInf = ElemThree(self.frameObsInf, 1, 1, "File with dynamic observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
-        self.staticObsInf = ElemThree(self.frameObsInf, 2, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        self.dynObsInf = ElemThree(self.frameObsInf, 2, 1, "File with dynamic observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+
+        self.hasStatic = True # By default assume this
 
         # Button to submit all, creating a sdtDBN
         self.buttonSubmitObsInf = ttk.Button(self.frameObsInf, text = "Submit", command=self.onSubmit)
         self.buttonSubmitObsInf.grid(row=4, column=1, columnspan=3, sticky = N+S+E+W)
 
+        self.frameErrors = ttk.Frame(self.frameObsInf, width = width)
+        self.frameErrors.grid(row=5, column=1, rowspan=3)
+
     def onSubmit(self):
+
+        if( self.checkArgs() == False):
+            return
+
+        printInfo = ttk.Label(self.frameErrors, text="Files with observations submited!", style="ok.TLabel")
+        printInfo.grid(row=2, column=1, columnspan=3)
+
         self.tab3.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName)
         self.tab4.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName)
         self.tab5.getInfSpecs(self.dynObsInf.FileName, self.staticObsInf.FileName)
         return
 
     def setStatic(self, hasStatic: bool):
+        self.hasStatic = hasStatic
+
         self.staticObsInf.destroy()
-        if (hasStatic == True):
-            self.staticObsInf = ElemThree(self.frameObsInf, 2, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        self.staticObsInf.FileName = ''
+
+        if (self.hasStatic == True):
+            self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        return
+    
+    def setDBNFile(self, dbnFilename):
+        self.showDBN.destroy
+        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", dbnFilename, self.widthLeft,self.widthCenter, 1, 1)
         return
 
+    def checkArgs(self):
+        for widget in self.frameErrors.winfo_children():
+            widget.destroy()
+
+        if (self.showDBN.messageRight == "No file yet selected" ):
+            printInfo = ttk.Label(self.frameErrors, text="No DBN was selected!", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=3)
+            return False
+
+        if(self.dynObsInf.FileName == "Not yet selected!" or self.dynObsInf.FileName == '' ):
+            printInfo = ttk.Label(self.frameErrors, text="No file with dynamic observations was given", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=3)
+            return False
+        
+        if( self.staticObsInf.FileName == "Not yet selected!" or ( self.staticObsInf.FileName == '' and self.hasStatic == True ) ):
+            printInfo = ttk.Label(self.frameErrors, text="No file with static observations was given, just using the dynamic observations", style="ok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=3)
+
+        return True
 
 
 

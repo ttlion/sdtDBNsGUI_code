@@ -94,18 +94,18 @@ class LearnDBN:
         stationaryValue = self.statDict.get(self.pageElements.getElem("stationaryValue").tkVar.get())
         self.isStationary = self.statDictBool.get(self.pageElements.getElem("stationaryValue").tkVar.get())
 
-        fileToSave = self.pageElements.getElem("fileToSave").entry.get()
+        self.fileToSave = self.pageElements.getElem("fileToSave").entry.get()
 
-        if(self.checkFileToSave(fileToSave) == False):
+        if(self.checkFileToSave() == False):
             return
 
         printInfo = ttk.Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN", style="ok.TLabel")
         printInfo.grid(row=4, column=1, columnspan=3)
 
         if(self.hasStatic == True):
-            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', fileToSave]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave]
         else:
-            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', fileToSave]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave]
 
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -204,8 +204,8 @@ class LearnDBN:
         except ValueError:
             return False
     
-    def checkFileToSave(self, fileToSave):
-        if( fileToSave == '' ):
+    def checkFileToSave(self):
+        if( self.fileToSave == '' ):
             printInfo = ttk.Label(self.submitionframe, text="File to save sdtDBN was not specified!", style="notok.TLabel")
             printInfo.grid(row=4, column=1, columnspan=3)
             return False
@@ -234,6 +234,7 @@ class LearnDBN:
     def giveArgsToOtherTabs(self):
 
         self.tab2.setStatic(self.hasStatic)
+        self.tab2.setDBNFile(self.fileToSave)
 
         self.tab3.changeAttOptions(self.dynAttList)
         self.tab4.changeAttOptions(self.dynAttList)
