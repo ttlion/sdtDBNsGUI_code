@@ -235,10 +235,10 @@ class LearnDBN:
 
         self.tab2.setDBNFile(self.fileToSave, self.hasStatic)
         self.tab3.setDBNFile(self.fileToSave)
+        self.tab4.setDBNFile(self.fileToSave)
 
         self.tab3.changeAttOptions(self.dynAttList)
         self.tab4.changeAttOptions(self.dynAttList)
         self.tab5.changeAttributes(self.dynAttList)
 
-        self.tab4.getLearningCmdArgs(self.learningCmdArgs)
         self.tab5.getLearningCmdArgs(self.learningCmdArgs)

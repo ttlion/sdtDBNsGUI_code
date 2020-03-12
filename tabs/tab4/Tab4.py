@@ -4,6 +4,7 @@ from tkinter import scrolledtext
 from utils.ElemThree import *
 from utils.ElemTwoInput import *
 from utils.ElemTwoSelect import *
+from utils.ElemTwoPresent import *
 
 import csv
 import subprocess
@@ -18,30 +19,38 @@ class Tab4:
         self.frameInfResults = ttk.Frame(self.framePredictProgres, width=width)
         self.frameInfResults.grid(row=1, column=3, rowspan=27)
 
+        self.frameErrors = ttk.Frame(self.framePredictProgres, width=width)
+        self.frameErrors.grid(row=7, column=1, rowspan=3)
+
         self.widthLeft = 30
         self.widthCenter = 15
         self.widthInput = 5
+
+        self.staticObsGiven = False # By default put as not having static observations
+
+        # Present filename of DBN being used
+        self.showDBN = ElemTwoInputPresent(self.framePredictProgres, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
 
         # Create a Tkinter variable for available ids
         self.idTab4TkVar = StringVar(self.framePredictProgres)
         self.idTab4Choices = [ 'Inference observations not given!' ]
 
-        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", self.widthLeft, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
+        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", self.widthLeft, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 2, 1 )
 
         # Create a Tkinter variable for available attributes
         self.attTab4TkVar = StringVar(self.framePredictProgres)
         self.attTab4Choices = [ 'There is not an sdtDBN learned!' ]
 
-        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
+        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 3, 1 )
 
         # Create a Tkinter variable for timesteps
-        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", self.widthLeft, self.widthInput, 3, 1, 1)
+        self.timestepTab4 = ElemTwoInput(self.framePredictProgres, "Maximum timestep: ", self.widthLeft, self.widthInput, 4, 1, 1)
 
         # Create a Tkinter variable for the modes
         self.modeTab4TkVar = StringVar(self.framePredictProgres)
         self.modeTab4Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
 
-        self.modeTab4 = ElemTwoSelect(self.framePredictProgres, "Desired estimation mode: ", self.widthLeft, self.modeTab4TkVar, self.modeTab4Choices, self.modeTab4Choices[0], 4, 1 )
+        self.modeTab4 = ElemTwoSelect(self.framePredictProgres, "Desired estimation mode: ", self.widthLeft, self.modeTab4TkVar, self.modeTab4Choices, self.modeTab4Choices[0], 5, 1 )
 
         self.modesDict = {
             'Distribution' : 'distrib',
@@ -51,7 +60,7 @@ class Tab4:
 
         # Button to submit, making inference
         self.makeInfTab4 = ttk.Button(self.framePredictProgres, text = "Make inference", command = self.onSubmit)
-        self.makeInfTab4.grid(row=5, column=1, columnspan=2, sticky = N+S+E+W)
+        self.makeInfTab4.grid(row=6, column=1, columnspan=2, sticky = N+S+E+W)
 
     def changeAttOptions(self, newOptionsList):
 
@@ -59,7 +68,7 @@ class Tab4:
 
         self.attTab4Choices = ['all'] + newOptionsList
 
-        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 2, 1 )
+        self.attTab4 = ElemTwoSelect(self.framePredictProgres, "Desired attribute: ", self.widthLeft, self.attTab4TkVar, self.attTab4Choices, self.attTab4Choices[0], 3, 1 )
 
     def changeIdsOptions(self, newOptionsList):
 
@@ -67,7 +76,7 @@ class Tab4:
 
         self.idTab4Choices = newOptionsList
 
-        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", self.widthLeft, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 1, 1 )
+        self.idTab4 = ElemTwoSelect(self.framePredictProgres, "Desired id: ", self.widthLeft, self.idTab4TkVar, self.idTab4Choices, self.idTab4Choices[0], 2, 1 )
 
     def getInfSpecs(self, dynObsInfFilename, staticObsInfFilename):
 
@@ -84,17 +93,21 @@ class Tab4:
 
         self.changeIdsOptions(idList)
 
-        return
-    
-    def getLearningCmdArgs(self, learningCmdArgs):
-        self.learningCmdArgs = learningCmdArgs
+        if(staticObsInfFilename == "Not yet selected!" or staticObsInfFilename == ''):
+            self.staticObsGiven = False
+        else:
+            self.staticObsGiven = True
+
         return
 
     def onSubmit(self):
+
+        if(self.checkArgs() == False):
+            return
+
         desiredID = self.idTab4TkVar.get()
 
         auxDynInfFilename = 'auxDynInf.csv'
-        auxStaticInfFilename = 'auxStaticInf.csv'
         auxInfVarFilename = 'auxInfVar.csv'
 
         dynInfFile = open(self.dynObsInfFilename)
@@ -112,20 +125,22 @@ class Tab4:
             writer.writerow(firstLine)
             writer.writerow(desiredLineDyn)
 
-        staticInfFile = open(self.staticObsInfFilename)
-        reader = csv.reader(staticInfFile, delimiter=',')
-        firstLine = next(reader)
-        desiredLineStatic = []
-        for row in reader:
-            if(row[0] == desiredID ):
-                desiredLineStatic = row
-                break
-        staticInfFile.close()
+        if(self.staticObsGiven == True):
+            auxStaticInfFilename = 'auxStaticInf.csv'
+            staticInfFile = open(self.staticObsInfFilename)
+            reader = csv.reader(staticInfFile, delimiter=',')
+            firstLine = next(reader)
+            desiredLineStatic = []
+            for row in reader:
+                if(row[0] == desiredID ):
+                    desiredLineStatic = row
+                    break
+            staticInfFile.close()
 
-        with open(auxStaticInfFilename, 'w', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow(firstLine)
-            writer.writerow(desiredLineStatic)
+            with open(auxStaticInfFilename, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(firstLine)
+                writer.writerow(desiredLineStatic)
         
         if(self.attTab4TkVar.get() != 'all'):
             desiredAtt = self.attTab4TkVar.get()
@@ -150,20 +165,23 @@ class Tab4:
                         writer.writerow(infAttInList)
                         i+=1
 
-
-        infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
+        if(self.staticObsGiven == True):
+            infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
+        else:
+            infCmdArgs = ['-obs', auxDynInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
 
         startupinfo = subprocess.STARTUPINFO()
         startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar']  + self.learningCmdArgs + infCmdArgs , startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight] + infCmdArgs , startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
         
         self.infResult = p.stdout.read()
 
         p.terminate()
         os.remove(auxDynInfFilename)
-        os.remove(auxStaticInfFilename)
         os.remove(auxInfVarFilename)
+        if(self.staticObsGiven == True):
+            os.remove(auxStaticInfFilename)
 
         for widget in self.frameInfResults.winfo_children():
              widget.destroy()
@@ -172,4 +190,47 @@ class Tab4:
         textInfo.grid(row=1, column=4, rowspan=27, padx=7)
         textInfo.insert(END, self.infResult)
 
+        return
+
+    def checkArgs(self):
+        for widget in self.frameErrors.winfo_children():
+            widget.destroy()
+
+        if (self.showDBN.messageRight == "No file yet selected" ):
+            printInfo = ttk.Label(self.frameErrors, text="No DBN was selected!", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=2)
+            return False
+        
+        if(self.idTab4TkVar.get() == 'Inference observations not given!'):
+            printInfo = ttk.Label(self.frameErrors, text="Inference observations not given!", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=2)
+            return False
+
+        if(self.attTab4TkVar.get() == 'There is not an sdtDBN learned!'):
+            printInfo = ttk.Label(self.frameErrors, text="No attribute was specified!", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=2)
+            return False
+        
+        if(self.is_integer(self.timestepTab4.entry.get()) == False):
+            printInfo = ttk.Label(self.frameErrors, text = "Timestep is not an integer!", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=2)
+            return False
+
+        if(int(self.timestepTab4.entry.get()) < 1):
+            printInfo = ttk.Label(self.frameErrors, text = "Timestep must be > 0", style="notok.TLabel")
+            printInfo.grid(row=1, column=1, columnspan=2)
+            return False
+
+        return True
+    
+    def is_integer(self, value: str) -> bool:
+        try:
+            int(value)
+            return True
+        except ValueError:
+            return False
+
+    def setDBNFile(self, dbnFilename):
+        self.showDBN.destroy()
+        self.showDBN = ElemTwoInputPresent(self.framePredictProgres, "sdtDBN being used: ", dbnFilename, self.widthLeft, self.widthCenter, 1, 1)
         return
