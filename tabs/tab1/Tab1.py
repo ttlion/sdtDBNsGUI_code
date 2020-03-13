@@ -30,8 +30,10 @@ class Tab1:
 
         self.pageElemts = PageElem()
 
-        self.dynObs = ElemThree(self.dbnLearnFrame, 1, 1, "File with dynamic observations: ", "Not yet selected!", self.widthLeft, self.widthCenter )
-        self.staticObs = ElemThree(self.dbnLearnFrame, 2, 1, "File with static observations: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        onlyCSVfiles = [("csv files", "*.csv" )]
+
+        self.dynObs = ElemThree(self.dbnLearnFrame, 1, 1, "File with dynamic observations: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        self.staticObs = ElemThree(self.dbnLearnFrame, 2, 1, "File with static observations: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles)
 
         self.pageElemts.addElem("dynObs", self.dynObs)
         self.pageElemts.addElem("staticObs", self.staticObs)

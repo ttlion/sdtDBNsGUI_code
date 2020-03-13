@@ -4,7 +4,7 @@ from tkinter import ttk
 
 class ElemThree:
 
-    def __init__(self, frame, row, column, message, initStatus, maxWidth, maxWidthFilename ):
+    def __init__(self, frame, row, column, message, initStatus, maxWidth, maxWidthFilename, fileTypes ):
         self.frame = frame
         self.row = row
         self.column = column
@@ -19,10 +19,12 @@ class ElemThree:
         self.pathLabel.grid(row=self.row, column=self.column+1)
         self.button.grid(row=self.row, column=self.column+2, pady = 3)
 
+        self.typesOfFiles = fileTypes
+
 
     def getFilePath(self):
         self.FileName = filedialog.askopenfilename( initialdir = ".", title = "Select file", 
-                                                filetypes = [("csv files", "*.csv" )]  )
+                                                filetypes = self.typesOfFiles  )
         
         self.pathLabel.destroy()
         self.pathLabel = ttk.Label(self.frame, text=self.FileName, padding = (0,5,0,5), style="filenames.TLabel")

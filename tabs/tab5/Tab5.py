@@ -37,8 +37,10 @@ class Tab5:
         self.desiredModeTab5 = ElemTwoSelect(self.framePredictMany, "Desired mode: ", self.widthLeft, self.desiredModeTab5TkVar, 
                                                 self.desiredModeTab5Choices, self.desiredModeTab5Choices[0], 2, 1 )
 
+        self.onlyCSVfiles = [("csv files", "*.csv" )]
+
         # This is selected by default
-        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 4, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 4, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter, self.onlyCSVfiles)
 
         # When this var changes, it should be created the proper box
         self.desiredModeTab5TkVar.trace("w", self.createProperBox)
@@ -71,7 +73,7 @@ class Tab5:
 
         if(self.desiredModeTab5TkVar.get() == 'Attribute inference' ):
             # Create variable to insert file with vars to inference
-            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 4, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+            self.timestepOrVarsToInf_Tab5 = ElemThree(self.framePredictMany, 4, 1, "File with vars to inference: ", "Not yet selected!", self.widthLeft, self.widthCenter, self.onlyCSVfiles)
 
             self.estimModeTab5Choices = [ 'Distribution', 'Most Probable', 'Random Estimation using probability distributions' ]
 

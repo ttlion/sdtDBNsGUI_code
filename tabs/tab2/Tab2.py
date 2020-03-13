@@ -22,9 +22,11 @@ class Tab2:
 
         self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
 
+        self.onlyCSVfiles = [("csv files", "*.csv" )]
+
         # Dynamic and static observations files to inference
-        self.dynObsInf = ElemThree(self.frameObsInf, 2, 1, "File with dynamic observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
-        self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+        self.dynObsInf = ElemThree(self.frameObsInf, 2, 1, "File with dynamic observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter, self.onlyCSVfiles)
+        self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter, self.onlyCSVfiles)
 
         self.hasStatic = True # By default assume this
 
@@ -58,7 +60,7 @@ class Tab2:
         self.staticObsInf.FileName = ''
 
         if (self.hasStatic == True):
-            self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter)
+            self.staticObsInf = ElemThree(self.frameObsInf, 3, 1, "File with static observations for inference: ", "Not yet selected!", self.widthLeft, self.widthCenter, self.onlyCSVfiles)
         return
 
     def checkArgs(self):

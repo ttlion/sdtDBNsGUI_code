@@ -40,7 +40,7 @@ class Tab1_1:
         self.presentDBNFrame = ttk.Frame(self.dbnLearnFileFrame, width=50)
         self.presentDBNFrame.grid(row=1, column=5, rowspan=10)
 
-        self.fileWithObj = ElemThree(self.dbnLearnFileFrame, 1, 1, "File with sdtDBN object: ", "Not yet selected!", self.widthLeft, self.widthCenter )
+        self.fileWithObj = ElemThree(self.dbnLearnFileFrame, 1, 1, "File with sdtDBN object: ", "Not yet selected!", self.widthLeft, self.widthCenter, [("all formats", "*.*")] )
 
         # Button to submit file
         self.buttonSubmitFile = ttk.Button(self.dbnLearnFileFrame, text = "Submit file", command = self.onSubmit)
