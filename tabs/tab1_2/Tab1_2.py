@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from graphviz import Source
+import os
 
 from utils.ElemTwoInput import *
 from utils.ElemTwoPresent import *
@@ -51,9 +51,12 @@ class Tab1_2:
         
         imgFileName = self.outputPathImg.entry.get()
 
-        s = Source(dotSourceCode)
-        
-        s.render(filename = imgFileName, cleanup = True, format = 'png')
+        with open("auxiliar.dot", 'w', newline='') as file:
+            file.write(dotSourceCode)
+
+        p = subprocess.run(['dot', '-Tpng', 'auxiliar.dot' , '-o', imgFileName + '.png'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+
+        os.remove('auxiliar.dot')
 
         self.img = PhotoImage(file = imgFileName + '.png')
         
