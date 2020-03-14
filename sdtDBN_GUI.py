@@ -20,6 +20,8 @@ from tabs.tab1.Tab1 import *
 
 from tabs.tab1_1.Tab1_1 import *
 
+from tabs.tab1_2.Tab1_2 import *
+
 from tabs.tab2.Tab2 import *
 
 from tabs.tab3.Tab3 import *
@@ -126,14 +128,16 @@ tab5 = Tab5(tabControl, 200)
 tab4 = Tab4(tabControl, 200)
 tab3 = Tab3(tabControl, 200)
 tab2 = Tab2(tabControl, 200, tab3, tab4, tab5)
-tab1_1 = Tab1_1(tabControl, 200, tab2, tab3, tab4, tab5)
-tab1 = Tab1(tabControl, 200, tab2, tab3, tab4, tab5)
+tab1_2 = Tab1_2(tabControl, 200)
+tab1_1 = Tab1_1(tabControl, 200, tab1_2, tab2, tab3, tab4, tab5)
+tab1 = Tab1(tabControl, 200, tab1_2, tab2, tab3, tab4, tab5)
 
 #########################################
 # Create TAB menu
 
 tabControl.add(tab1.dbnLearnFrame, text="Learn DBN from data")
-tabControl.add(tab1_1.dbnLearnFileFrame, text="Get DBN from file")
+tabControl.add(tab1_1.dbnLearnFileFrame, text="Load DBN from file")
+tabControl.add(tab1_2.frameInfoToImg, text="Get Image of DBN")
 tabControl.add(tab2.frameObsInf, text="Observations to Inference")
 tabControl.add(tab3.framePredictSpecific, text="Predict attribute distribution")
 tabControl.add(tab4.framePredictProgres, text="Predict progression")

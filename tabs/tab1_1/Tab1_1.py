@@ -14,7 +14,8 @@ from tabs.tab1.LearnDBN import *
 
 class Tab1_1:
 
-    def __init__(self, mainFrame, width, tab2, tab3, tab4, tab5):
+    def __init__(self, mainFrame, width, tab1_2, tab2, tab3, tab4, tab5):
+        self.tab1_2 = tab1_2
         self.tab2 = tab2
         self.tab3 = tab3
         self.tab4 = tab4
@@ -128,6 +129,7 @@ class Tab1_1:
     
     def giveArgsToOtherTabs(self):
 
+        self.tab1_2.setDBNFile(self.fileWithObj.FileName)
         self.tab2.setDBNFile(self.fileWithObj.FileName, self.hasStatic)
         self.tab3.setDBNFile(self.fileWithObj.FileName)
         self.tab4.setDBNFile(self.fileWithObj.FileName)
