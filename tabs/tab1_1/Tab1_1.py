@@ -65,14 +65,9 @@ class Tab1_1:
         if( self.checkArgs() == False ):
             return
 
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.fileWithObj.FileName, '-d' ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.fileWithObj.FileName, '-d' ], startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
-
-        auxText_getAtts = p.stdout.read()
-
-        p.terminate()
+        auxText_getAtts = p.stdout
 
         # Reinitialize these lists
         self.dynAttList = []
@@ -88,11 +83,9 @@ class Tab1_1:
             if result1 is not None:
                 self.staticAttList.append(result1.group(1))
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.fileWithObj.FileName ], startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+        p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.fileWithObj.FileName ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
-        self.learnedsdtDBN_text = p.stdout.read()
-
-        p.terminate()
+        self.learnedsdtDBN_text = p.stdout
 
         printInfo = ttk.Label(self.submitionframe, text="sdtDBN retrieved from file!", style="ok.TLabel")
         printInfo.grid(row=1, column=1, columnspan=3)

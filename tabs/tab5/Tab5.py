@@ -114,14 +114,9 @@ class Tab5:
         else:
             infCmdArgs = infCmdArgs + ['-t', self.timestepOrVarsToInf_Tab5.entry.get() , '-tf', self.outputPathTab5.entry.get() ]
 
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight ]  + infCmdArgs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight ]  + infCmdArgs , startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
-
-        p.stdout.read()
-
-        p.terminate()
+        p.stdout
 
         printInfo = ttk.Label(self.frameErrors, text = "Desired prediction is in the defined output file!", style="ok.TLabel")
         printInfo.grid(row=1, column=1, columnspan=2)

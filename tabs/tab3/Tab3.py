@@ -101,14 +101,10 @@ class Tab3:
         else:
             infCmdArgs = ['-obs', auxDynInfFilename, '-inf', auxInfVarFilename, '-infFmt', 'distrib' ]
 
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight ] + infCmdArgs , startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+        p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight ] + infCmdArgs , stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
         
-        self.infResult = p.stdout.read()
+        self.infResult = p.stdout
 
-        p.terminate()
         os.remove(auxDynInfFilename)
         os.remove(auxInfVarFilename)
         if(self.staticObsGiven == True):

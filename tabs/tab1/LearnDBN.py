@@ -107,14 +107,9 @@ class LearnDBN:
         else:
             self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave]
 
-        startupinfo = subprocess.STARTUPINFO()
-        startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar'] + self.learningCmdArgs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
 
-        p = subprocess.Popen(['java', '-jar', 'sdtDBN_v0_0_1.jar'] + self.learningCmdArgs, startupinfo=startupinfo, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
-
-        self.learnedsdtDBN_text = p.stdout.read()
-
-        p.terminate()
+        self.learnedsdtDBN_text = p.stdout
 
         printInfo = ttk.Label(self.submitionframe, text="sdtDBN was learned!", style="ok.TLabel")
         printInfo.grid(row=5, column=1, columnspan=3)

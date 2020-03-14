@@ -2,6 +2,7 @@
 # Imports
 
 from os import path
+import platform
 
 from tkinter import *
 from tkinter import filedialog
@@ -33,8 +34,18 @@ from tabs.tab5.Tab5 import *
 root = Tk()
 root.title("sdtDBNs GUI")
 
-if (path.exists("ist_logo_icon.ico")): # Just safety guard
-    root.iconbitmap("ist_logo_icon.ico")
+currOS = platform.system()
+if (currOS == 'Linux'): #If in linux
+    if (path.exists("icons/ist_logo_gif.gif")): # Just safety guard
+        icon_img = PhotoImage(file='icons/ist_logo_gif.gif')
+        root.iconphoto(True, icon_img)
+elif (currOS == 'Windows'): # If in Windows
+    if (path.exists("icons/ist_logo_icon.ico")): # Just safety guard
+        root.iconbitmap("icons/ist_logo_icon.ico")
+else:
+    print("Only distributions for Windows and Linux are available!")
+    quit()
+
 
 ##################################################################################
 ##################################################################################
