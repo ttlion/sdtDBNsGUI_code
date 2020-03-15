@@ -29,7 +29,7 @@ class Tab4:
         self.staticObsGiven = False # By default put as not having static observations
 
         # Present filename of DBN being used
-        self.showDBN = ElemTwoInputPresent(self.framePredictProgres, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.framePredictProgres, "sdtDBN being used: ", "No file yet selected", self.widthLeft, 1, 1)
 
         # Create a Tkinter variable for available ids
         self.idTab4TkVar = StringVar(self.framePredictProgres)
@@ -228,5 +228,5 @@ class Tab4:
 
     def setDBNFile(self, dbnFilename):
         self.showDBN.destroy()
-        self.showDBN = ElemTwoInputPresent(self.framePredictProgres, "sdtDBN being used: ", dbnFilename, self.widthLeft, self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.framePredictProgres, "sdtDBN being used: ", dbnFilename, self.widthLeft, 1, 1)
         return

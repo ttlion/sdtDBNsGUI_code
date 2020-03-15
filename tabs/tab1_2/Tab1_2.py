@@ -25,7 +25,7 @@ class Tab1_2:
         self.widthInput = 25
 
         # Present filename of DBN being used
-        self.showDBN = ElemTwoInputPresent(self.frameInfoToImg, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.frameInfoToImg, "sdtDBN being used: ", "No file yet selected", self.widthLeft, 1, 1)
 
         # Create a Tkinter variable for output filename
         self.outputPathImg = ElemTwoInput(self.frameInfoToImg, "Image filename: ", self.widthLeft, self.widthInput, 2, 1, 'imgNameExample.png')
@@ -81,5 +81,5 @@ class Tab1_2:
     
     def setDBNFile(self, dbnFilename):
         self.showDBN.destroy()
-        self.showDBN = ElemTwoInputPresent(self.frameInfoToImg, "sdtDBN being used: ", dbnFilename, self.widthLeft, self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.frameInfoToImg, "sdtDBN being used: ", dbnFilename, self.widthLeft, 1, 1)
         return

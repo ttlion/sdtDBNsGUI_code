@@ -28,7 +28,7 @@ class Tab5:
         self.staticObsGiven = False # By default put as not having static observations
 
         # Present filename of DBN being used
-        self.showDBN = ElemTwoInputPresent(self.framePredictMany, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.framePredictMany, "sdtDBN being used: ", "No file yet selected", self.widthLeft, 1, 1)
 
         # Define desired mode
         self.desiredModeTab5TkVar = StringVar(self.framePredictMany)
@@ -169,5 +169,5 @@ class Tab5:
     
     def setDBNFile(self, dbnFilename):
         self.showDBN.destroy()
-        self.showDBN = ElemTwoInputPresent(self.framePredictMany, "sdtDBN being used: ", dbnFilename, self.widthLeft, self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.framePredictMany, "sdtDBN being used: ", dbnFilename, self.widthLeft, 1, 1)
         return

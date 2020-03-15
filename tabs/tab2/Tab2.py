@@ -20,7 +20,7 @@ class Tab2:
         self.frameObsInf = ttk.Frame(mainFrame, width = width)
         self.frameObsInf.grid(row=1, column=1, rowspan = 6)
 
-        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", "No file yet selected", self.widthLeft,self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.frameObsInf, "sdtDBN being used: ", "No file yet selected", self.widthLeft, 1, 1)
 
         self.onlyCSVfiles = [("csv files", "*.csv" )]
 
@@ -52,7 +52,7 @@ class Tab2:
 
     def setDBNFile(self, dbnFilename, hasStatic: bool):
         self.showDBN.destroy()
-        self.showDBN = ElemTwoInputPresent(self.frameObsInf, "sdtDBN being used: ", dbnFilename, self.widthLeft,self.widthCenter, 1, 1)
+        self.showDBN = ElemTwoPresent(self.frameObsInf, "sdtDBN being used: ", dbnFilename, self.widthLeft, 1, 1)
         
         self.hasStatic = hasStatic
 
