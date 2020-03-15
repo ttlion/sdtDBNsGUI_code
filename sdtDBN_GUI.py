@@ -10,6 +10,7 @@ from tkinter import ttk
 
 from mainMenu.Menu import *
 
+from utils.ScrollableFrame import *
 from utils.ElemThree import *
 from utils.ElemTwoInput import *
 from utils.ElemTwoSelect import *
@@ -35,6 +36,9 @@ from tabs.tab5.Tab5 import *
 
 root = Tk()
 root.title("sdtDBNs GUI")
+
+root.geometry("1150x450")
+root.resizable(True, True)
 
 currOS = platform.system()
 if (currOS == 'Linux'): #If in linux
@@ -117,9 +121,21 @@ s.map('TMenubutton', foreground = [('active','#FF4500')])
 # Main menu bar
 windowMenu = MyMenu(root)
 
+##################################################################################
+##################################################################################
+# Creating vertical and horizontal scrollbars
+
+frameWithScroll = ScrollableFrame(root)
+frameWithScroll.grid(row=1, column=1, sticky="nsew")
+
+def changeScrollsPosition(event):
+    frameWithScroll.canvas.config(width = root.winfo_width()-20, height = root.winfo_height()-20)
+
+root.bind( "<Configure>", changeScrollsPosition )
+
 #########################################
 # Define tab environment
-tabControl = ttk.Notebook(root)
+tabControl = ttk.Notebook(frameWithScroll.scrollable_frame)
 
 #########################################
 # Create the several tabs
@@ -142,7 +158,7 @@ tabControl.add(tab2.frameObsInf, text="Observations to Inference")
 tabControl.add(tab3.framePredictSpecific, text="Predict attribute distribution")
 tabControl.add(tab4.framePredictProgres, text="Predict progression")
 tabControl.add(tab5.framePredictMany, text="Predictions for many IDs")
-tabControl.grid(row=1, column=1, rowspan=10)
+tabControl.pack(fill="both", expand=True)
 
 #########################################
 # Mainloop of program
