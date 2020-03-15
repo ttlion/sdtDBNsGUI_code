@@ -28,7 +28,7 @@ class Tab1_2:
         self.showDBN = ElemTwoPresent(self.frameInfoToImg, "sdtDBN being used: ", "No file yet selected", self.widthLeft, 1, 1)
 
         # Create a Tkinter variable for output filename
-        self.outputPathImg = ElemTwoInput(self.frameInfoToImg, "Image filename: ", self.widthLeft, self.widthInput, 2, 1, 'imgNameExample.png')
+        self.outputPathImg = ElemTwoInput(self.frameInfoToImg, "Image filename: ", self.widthLeft, self.widthInput, 2, 1, 'imgNameExample')
 
         # Button to submit, making inference
         self.makeInfTab5 = ttk.Button(self.frameInfoToImg, text = "Create Image", command = self.onSubmit)
@@ -63,7 +63,7 @@ class Tab1_2:
         labelToPresentImg = ttk.Label(self.framePresentImg, image = self.img)
         labelToPresentImg.grid(row=1, column=1, rowspan=40)
 
-        printInfo = ttk.Label(self.frameErrors, text="Image " + imgFileName + ".png was saved", style="ok.TLabel")
+        printInfo = ttk.Label(self.frameErrors, text="Image of DBN saved at " + imgFileName + ".png", style="ok.TLabel")
         printInfo.grid(row=1, column=1, columnspan=2)
 
         return
