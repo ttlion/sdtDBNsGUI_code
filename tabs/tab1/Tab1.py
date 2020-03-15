@@ -9,8 +9,6 @@ from utils.ElemTwoSelect import *
 from tabs.tab1.PageElements import *
 from tabs.tab1.LearnDBN import *
 
-
-
 class Tab1:
 
     def __init__(self, mainFrame, width, tab1_2, tab2, tab3, tab4, tab5):
@@ -64,4 +62,4 @@ class Tab1:
         self.fileToSave = ElemTwoInput(self.dbnLearnFrame, "File to save the learned sdtDBN: ", self.widthLeft, self.widthCenter, 8, 1, 'exampleFile.txt')
         self.pageElemts.addElem("fileToSave", self.fileToSave)
 
-        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 40, 9, 1, self.pageElemts, tab1_2, tab2, tab3, tab4, tab5)
+        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 9, 1, self.pageElemts, tab1_2, tab2, tab3, tab4, tab5)

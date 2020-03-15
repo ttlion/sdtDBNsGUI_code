@@ -13,7 +13,7 @@ from tabs.tab2 import *
 
 class LearnDBN:
 
-    def __init__(self, superFrame, message, maxWidth, row, column, pageElements, tab1_2, tab2, tab3, tab4, tab5):
+    def __init__(self, superFrame, message, row, column, pageElements, tab1_2, tab2, tab3, tab4, tab5):
         self.tab1_2 = tab1_2
         self.tab2 = tab2
         self.tab3 = tab3
@@ -23,21 +23,20 @@ class LearnDBN:
         self.superFrame = superFrame
         self.row = row
         self.column = column
-        self.width = maxWidth
         self.message = message
 
         self.pageElements = pageElements
+
+        self.submitButton = ttk.Button(superFrame, text = message, command=self.onSubmit)
+        self.submitButton.grid(row=self.row, column=1, columnspan=3, sticky = N+S+E+W)
         
-        self.submitionframe = ttk.Frame(superFrame, width=2000)
-        self.submitionframe.grid(row=self.row, column=self.column, columnspan=3)
+        self.submitionframe = ttk.Frame(superFrame)
+        self.submitionframe.grid(row=self.row+1, column=self.column, columnspan=3)
 
-        self.submitButton = ttk.Button(self.submitionframe, text = message, width=self.width, command=self.onSubmit)
-        self.submitButton.grid(row=1, column=1, columnspan=3, sticky = N+S+E+W)
-
-        self.presentDBNFrame = ttk.Frame(superFrame, width=50)
+        self.presentDBNFrame = ttk.Frame(superFrame)
         self.presentDBNFrame.grid(row=1, column=5, rowspan=10)
 
-        self.presentDBNAttsFrame = ttk.Frame(superFrame, width=50)
+        self.presentDBNAttsFrame = ttk.Frame(superFrame)
         self.presentDBNAttsFrame.grid(row=1, column=4, rowspan=10)
 
         self.dynAttList = []
@@ -67,9 +66,6 @@ class LearnDBN:
 
         for widget in self.presentDBNFrame.winfo_children():
             widget.destroy()
-
-        self.submitButton = ttk.Button(self.submitionframe, text = self.message, width=self.width, command=self.onSubmit)
-        self.submitButton.grid(row=1, column=1, columnspan=3, sticky = N+S+E+W)
 
         printInfo = ttk.Label(self.submitionframe, text="Analyzing inputs", style="ok.TLabel")
         printInfo.grid(row=2, column=1, columnspan=3)
