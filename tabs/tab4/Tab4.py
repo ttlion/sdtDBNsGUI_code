@@ -141,41 +141,74 @@ class Tab4:
                 writer = csv.writer(file)
                 writer.writerow(firstLine)
                 writer.writerow(desiredLineStatic)
-        
-        if(self.attTab4TkVar.get() != 'all'):
-            desiredAtt = self.attTab4TkVar.get()
-            maxTimestep = int(self.timestepTab4.entry.get())
-            with open(auxInfVarFilename, 'w', newline='') as file:
-                writer = csv.writer(file)
-                i=0
-                while (i<=maxTimestep):
-                    infAttInList = [desiredAtt, i ]
-                    writer.writerow(infAttInList)
-                    i+=1
-        else:
-            maxTimestep = int(self.timestepTab4.entry.get())
-            with open(auxInfVarFilename, 'w', newline='') as file:
-                writer = csv.writer(file)
-                for att in self.attTab4Choices:
-                    if(att == 'all'):
-                        continue
+
+        if(self.modeTab4TkVar.get() == 'Distribution'):
+            if(self.attTab4TkVar.get() != 'all'):
+                desiredAtt = self.attTab4TkVar.get()
+                maxTimestep = int(self.timestepTab4.entry.get())
+                with open(auxInfVarFilename, 'w', newline='') as file:
+                    writer = csv.writer(file)
                     i=0
                     while (i<=maxTimestep):
-                        infAttInList = [att, i]
+                        infAttInList = [desiredAtt, i ]
                         writer.writerow(infAttInList)
                         i+=1
+            else:
+                maxTimestep = int(self.timestepTab4.entry.get())
+                with open(auxInfVarFilename, 'w', newline='') as file:
+                    writer = csv.writer(file)
+                    for att in self.attTab4Choices:
+                        if(att == 'all'):
+                            continue
+                        i=0
+                        while (i<=maxTimestep):
+                            infAttInList = [att, i]
+                            writer.writerow(infAttInList)
+                            i+=1
+
+        infCmdArgs = ['-obs', auxDynInfFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get())]
 
         if(self.staticObsGiven == True):
-            infCmdArgs = ['-obs', auxDynInfFilename, '-obsStatic', auxStaticInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
+            infCmdArgs = infCmdArgs + ['-obsStatic', auxStaticInfFilename]
+
+        if(self.modeTab4TkVar.get() == 'Distribution'):
+            infCmdArgs = infCmdArgs + ['-inf', auxInfVarFilename]
         else:
-            infCmdArgs = ['-obs', auxDynInfFilename, '-inf', auxInfVarFilename, '-infFmt', self.modesDict.get(self.modeTab4TkVar.get()) ]
+            infCmdArgs = infCmdArgs + ['-t', self.timestepTab4.entry.get()]
+            if(self.attTab4TkVar.get() != 'all'):
+                infCmdArgs = infCmdArgs + ['-tf', 'auxFile.csv']
 
         p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar', '-fromFile', self.showDBN.messageRight] + infCmdArgs , stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
         
         self.infResult = p.stdout
 
+        if(self.modeTab4TkVar.get() != 'Distribution' and self.attTab4TkVar.get() != 'all'):
+            
+            attToKeep = self.attTab4TkVar.get()
+            with open('auxFile.csv', 'r', newline='') as file:
+                reader = csv.DictReader(file)
+
+                header = [reader.fieldnames[0]]
+                for elem in reader.fieldnames:
+                    if (attToKeep == elem.split('__')[0]):
+                        header = header + [ elem ]
+                string = ','.join(header)
+                
+                for row in reader:
+                    newLine = [ row[header[0]] ]
+                    for key in row:
+                        if (attToKeep == key.split('__')[0]):
+                            newLine = newLine + [ row[key] ]
+                    string = string + "\n" + (','.join(newLine))
+
+            self.infResult = self.infResult + string
+            os.remove('auxFile.csv')
+
         os.remove(auxDynInfFilename)
-        os.remove(auxInfVarFilename)
+        
+        if(self.modeTab4TkVar.get() == 'Distribution'):
+            os.remove(auxInfVarFilename)
+            
         if(self.staticObsGiven == True):
             os.remove(auxStaticInfFilename)
 
