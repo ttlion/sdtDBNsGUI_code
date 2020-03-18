@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
+from tkinter import scrolledtext
 from tkinter import ttk
 import subprocess
 
@@ -17,6 +18,9 @@ class Tab5:
 
         self.frameErrors = ttk.Frame(self.framePredictMany, width=width)
         self.frameErrors.grid(row=7, column=1, rowspan=3)
+
+        self.frameInfResults = ttk.Frame(self.framePredictMany, width=width)
+        self.frameInfResults.grid(row=1, column=4, rowspan=27)
 
         self.dynObsInfFilename = ''
         self.staticObsInfFilename = ''
@@ -118,14 +122,23 @@ class Tab5:
 
         p.stdout
 
-        printInfo = ttk.Label(self.frameErrors, text = "Desired prediction is in the defined output file!", style="ok.TLabel")
+        printInfo = ttk.Label(self.frameErrors, text = "Desired prediction is also in the defined output file!", style="ok.TLabel")
         printInfo.grid(row=1, column=1, columnspan=2)
+
+        with open(self.outputPathTab5.entry.get(), 'r') as file:
+            outputFileData = file.read()
+            textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=27, width=45)
+            textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+            textInfo.insert(END, outputFileData)
 
         return
 
     def checkArgs(self):
         for widget in self.frameErrors.winfo_children():
             widget.destroy()
+
+        for widget in self.frameInfResults.winfo_children():
+             widget.destroy()
         
         if (self.showDBN.messageRight == "No file yet selected" ):
             printInfo = ttk.Label(self.frameErrors, text="No DBN was selected!", style="notok.TLabel")
