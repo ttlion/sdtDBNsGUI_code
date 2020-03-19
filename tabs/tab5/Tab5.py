@@ -127,8 +127,8 @@ class Tab5:
 
         with open(self.outputPathTab5.entry.get(), 'r') as file:
             outputFileData = file.read()
-            textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=27, width=45)
-            textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+            textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=33, width=45)
+            textInfo.grid(row=1, column=1, rowspan=33, padx=7)
             textInfo.insert(END, outputFileData)
 
         return

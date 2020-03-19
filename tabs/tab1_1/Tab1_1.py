@@ -111,13 +111,13 @@ class Tab1_1:
     def presentOutputToUser(self):
         self.presentAttsToUser()
 
-        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=27, width=45)
-        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo = scrolledtext.ScrolledText(self.presentDBNFrame, height=33, width=45)
+        textInfo.grid(row=1, column=1, rowspan=33, padx=7)
         textInfo.insert(END, self.learnedsdtDBN_text)
 
     def presentAttsToUser(self):
-        textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=27, width=15)
-        textInfo.grid(row=1, column=1, rowspan=27, padx=7)
+        textInfo = scrolledtext.ScrolledText(self.presentDBNAttsFrame, height=33, width=15)
+        textInfo.grid(row=1, column=1, rowspan=33, padx=7)
         textInfo.insert(END, "Dynamic Atts:\n")
         for element in self.dynAttList:
             textInfo.insert(END, element + "\n")

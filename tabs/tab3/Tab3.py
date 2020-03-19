@@ -113,8 +113,8 @@ class Tab3:
         for widget in self.frameInfResults.winfo_children():
              widget.destroy()
 
-        textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=27, width=45)
-        textInfo.grid(row=1, column=4, rowspan=27, padx=7)
+        textInfo = scrolledtext.ScrolledText(self.frameInfResults, height=33, width=45)
+        textInfo.grid(row=1, column=4, rowspan=33, padx=7)
         textInfo.insert(END, self.infResult)
 
         return
