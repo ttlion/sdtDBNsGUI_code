@@ -18,7 +18,7 @@ class Tab1:
         self.tab4 = tab4
         self.tab5 = tab5
 
-        self.widthLeft = 30
+        self.widthLeft = 50
         self.widthCenter = 15
         self.widthInput = 4
 
@@ -62,4 +62,21 @@ class Tab1:
         self.fileToSave = ElemTwoInput(self.dbnLearnFrame, "File to save the learned sdtDBN: ", self.widthLeft, self.widthCenter, 8, 1, 'exampleFile.txt')
         self.pageElemts.addElem("fileToSave", self.fileToSave)
 
-        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 9, 1, self.pageElemts, tab1_2, tab2, tab3, tab4, tab5)
+        self.mA_dynPast = ElemThree(self.dbnLearnFrame, 9, 1, "File with mandatory parents from previous timesteps: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        self.mA_dynSame = ElemThree(self.dbnLearnFrame, 10, 1, "File with mandatory parents from the same timestep: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        self.mA_static = ElemThree(self.dbnLearnFrame, 11, 1, "File with mandatory static parents: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        
+        self.pageElemts.addElem("mA_dynPast", self.mA_dynPast)
+        self.pageElemts.addElem("mA_dynSame", self.mA_dynSame)
+        self.pageElemts.addElem("mA_static", self.mA_static)
+
+        self.mNotA_dynPast = ElemThree(self.dbnLearnFrame, 12, 1, "File with forbidden parents from previous timesteps: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        self.mNotA_dynSame = ElemThree(self.dbnLearnFrame, 13, 1, "File with forbidden parents from the same timestep: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        self.mNotA_static = ElemThree(self.dbnLearnFrame, 14, 1, "File with forbidden static parents: ", "Not yet selected!", self.widthLeft, self.widthCenter, onlyCSVfiles )
+        
+        self.pageElemts.addElem("mNotA_dynPast", self.mNotA_dynPast)
+        self.pageElemts.addElem("mNotA_dynSame", self.mNotA_dynSame)
+        self.pageElemts.addElem("mNotA_static", self.mNotA_static)
+
+
+        self.learnSubmit = LearnDBN(self.dbnLearnFrame, "Create sdtDBN", 15, 1, self.pageElemts, tab1_2, tab2, tab3, tab4, tab5)

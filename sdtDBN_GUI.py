@@ -37,7 +37,7 @@ from tabs.tab5.Tab5 import *
 root = Tk()
 root.title("sdtDBNs GUI")
 
-root.geometry("1150x450")
+root.geometry("1150x685")
 root.resizable(True, True)
 
 currOS = platform.system()

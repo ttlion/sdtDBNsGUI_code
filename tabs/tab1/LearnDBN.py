@@ -96,20 +96,31 @@ class LearnDBN:
         if(self.checkFileToSave() == False):
             return
 
+        self.restrictionsArgs = []
+        if(self.checkRestrictions(self.hasStatic) == False):
+            return
+
         printInfo = ttk.Label(self.submitionframe, text="All inputs in proper format, learning sdtDBN", style="ok.TLabel")
-        printInfo.grid(row=4, column=1, columnspan=3)
+        printInfo.grid(row=10, column=1, columnspan=3)
 
         if(self.hasStatic == True):
-            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-is', staticObsFileName, '-m', markovLag, '-p', pValue, '-b', bValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave] + self.restrictionsArgs
         else:
-            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave]
+            self.learningCmdArgs = ['-i', dynObsFileName, '-m', markovLag, '-p', pValue, '-s', sfValue, '-pm', stationaryValue, '-toFile', self.fileToSave] + self.restrictionsArgs
 
         p = subprocess.run(['java', '-jar', 'sdtDBN_v0_0_1.jar'] + self.learningCmdArgs, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, encoding='utf-8')
+
+        if(p.stderr != ''):
+            self.learnedsdtDBN_text = p.stderr + p.stdout
+            printInfo = ttk.Label(self.submitionframe, text="Problem with input arguments content: sdtDBN was NOT learned!", style="notok.TLabel")
+            printInfo.grid(row=11, column=1, columnspan=3)
+            self.presentOutputToUser()
+            return
 
         self.learnedsdtDBN_text = p.stdout
 
         printInfo = ttk.Label(self.submitionframe, text="sdtDBN was learned!", style="ok.TLabel")
-        printInfo.grid(row=5, column=1, columnspan=3)
+        printInfo.grid(row=11, column=1, columnspan=3)
 
         self.presentOutputToUser()
         self.giveArgsToOtherTabs()
@@ -201,6 +212,37 @@ class LearnDBN:
             printInfo = ttk.Label(self.submitionframe, text="File to save sdtDBN was not specified!", style="notok.TLabel")
             printInfo.grid(row=4, column=1, columnspan=3)
             return False
+        return True
+
+    def checkRestrictions(self, hasStatic):
+        restrictionsDict = {
+            "mA_dynPast" : "mandatory dynamic parents from previous timesteps",
+            "mA_dynSame" : "mandatory dynamic parents from the same timestep",
+            "mA_static" : "mandatory static parents",
+            "mNotA_dynPast" : "forbidden dynamic parents from previous timesteps",
+            "mNotA_dynSame" : "forbidden dynamic parents from the same timestep",
+            "mNotA_static" : "forbidden static parents"
+        }
+
+        # Check all restrictions args and fill self.restrictionsArgs String accordingly
+        i = 4
+        for key, value in restrictionsDict.items():
+            fileName = self.pageElements.getElem(key).FileName
+
+            if(fileName == "Not yet selected!" or fileName == ""):
+                continue
+            
+            if( (("static" in key) == True) and (hasStatic == False) ):
+                printInfo = ttk.Label(self.submitionframe, text = "There were given restrictions on static parents but no static observations were given!", style="notok.TLabel")
+                printInfo.grid(row=i, column=1, columnspan=3)
+                return False
+
+            self.restrictionsArgs += ["-" + key] + [fileName]
+
+            printInfo = ttk.Label(self.submitionframe, text = "There were given " + value, style="ok.TLabel")    
+            printInfo.grid(row=i, column=1, columnspan=3)
+            i+=1
+
         return True
 
     def presentOutputToUser(self):
