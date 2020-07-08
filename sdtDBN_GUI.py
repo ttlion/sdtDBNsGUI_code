@@ -41,16 +41,13 @@ root.geometry("1150x685")
 root.resizable(True, True)
 
 currOS = platform.system()
-if (currOS == 'Linux' or currOS == 'Darwin'): #If in Linux or macOS
-    if (path.exists("icons/ist_logo_gif.gif")): # Just safety guard
-        icon_img = PhotoImage(file='icons/ist_logo_gif.gif')
-        root.iconphoto(True, icon_img)
-elif (currOS == 'Windows'): # If in Windows
+if (currOS == 'Windows'): # If in Windows
     if (path.exists("icons/ist_logo_icon.ico")): # Just safety guard
         root.iconbitmap("icons/ist_logo_icon.ico")
 else:
-    print("Only distributions for Windows, Linux and macOS are available!")
-    quit()
+    if (path.exists("icons/ist_logo_gif.gif")): # Just safety guard
+        icon_img = PhotoImage(file='icons/ist_logo_gif.gif')
+        root.iconphoto(True, icon_img)
 
 
 ##################################################################################
